@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RBS Entertainment
+
+This is a cinematic redesign of the RBS Entertainment website, based on the `neonrated.com` aesthetic.
 
 ## Getting Started
 
