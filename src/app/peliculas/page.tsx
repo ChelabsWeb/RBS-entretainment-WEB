@@ -75,7 +75,7 @@ export default function PeliculasPage() {
     <main className="min-h-screen bg-black">
       <Navbar />
       <Hero 
-        heroTitle="CINE"
+        heroTitle="PROXIMOS ESTRENOS"
         isLeftAligned={true}
         showDetails={false}
         headingClassName="md:text-[6vw]"

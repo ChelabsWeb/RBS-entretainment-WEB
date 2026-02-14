@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 import { ThemeProvider } from "@/context/ThemeContext";
+import { CustomScrollbar } from "@/components/CustomScrollbar";
 
 export default function RootLayout({
   children,
@@ -25,6 +26,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white`}
       >
         <ThemeProvider>
+          <CustomScrollbar />
           <SmoothScroll>
             {children}
           </SmoothScroll>
