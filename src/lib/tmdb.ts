@@ -34,6 +34,22 @@ export async function fetchPopularMovies(): Promise<Movie[]> {
   return data.results;
 }
 
+export async function fetchNowPlayingMovies(): Promise<Movie[]> {
+  const response = await fetch(
+    `${TMDB_BASE_URL}/movie/now_playing?api_key=${TMDB_API_KEY}&language=es-ES`
+  );
+  const data = await response.json() as { results: Movie[] };
+  return data.results;
+}
+
+export async function fetchUpcomingMovies(): Promise<Movie[]> {
+  const response = await fetch(
+    `${TMDB_BASE_URL}/movie/upcoming?api_key=${TMDB_API_KEY}&language=es-ES`
+  );
+  const data = await response.json() as { results: Movie[] };
+  return data.results;
+}
+
 export async function fetchMovieDetails(movieId: number): Promise<Record<string, unknown>> {
   const response = await fetch(
     `${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&append_to_response=videos,credits&language=es-ES`

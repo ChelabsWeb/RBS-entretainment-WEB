@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, Search, User } from "lucide-react";
+import { Menu, Search, User, X } from "lucide-react";
 import clsx from "clsx";
 import { useTheme } from "@/context/ThemeContext";
 import Link from "next/link";
@@ -36,7 +36,7 @@ export function Navbar() {
 
       <div
         className={clsx(
-          "fixed inset-0 -z-50 bg-black transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]",
+          "fixed inset-0 z-[100] bg-black transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] pointer-events-auto",
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
@@ -45,10 +45,11 @@ export function Navbar() {
               onClick={() => setIsMenuOpen(false)}
               className="absolute top-10 right-10 text-white/40 hover:text-white transition-colors"
             >
-              <Menu className="h-8 w-8 rotate-45" />
+              <X className="h-8 w-8" />
             </button>
             {[
-              { name: "PELÍCULAS", href: "/#movies" },
+              { name: "INICIO", href: "/" },
+              { name: "PELÍCULAS", href: "/peliculas" },
               { name: "LICENCIAS", href: "/licensing" },
               { name: "QUIÉNES SOMOS", href: "/about" },
               { name: "CONTACTO", href: "/contact" }
@@ -56,7 +57,7 @@ export function Navbar() {
              <Link
                key={item.name}
                href={item.href}
-               className="text-4xl font-black tracking-widest uppercase text-white hover:text-theme-primary transition-colors"
+               className="text-6xl md:text-8xl font-black tracking-tighter uppercase text-white hover:text-theme-primary transition-all duration-300 hover:scale-105"
                onClick={() => setIsMenuOpen(false)}
              >
                {item.name}

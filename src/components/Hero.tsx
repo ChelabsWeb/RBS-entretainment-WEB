@@ -4,11 +4,25 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, Loader2, X } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
-import { fetchTrendingMovies, getImageUrl, Movie, searchMovie, fetchMovieTrailers } from "@/lib/tmdb";
+import { fetchNowPlayingMovies, fetchUpcomingMovies, getImageUrl, Movie, searchMovie, fetchMovieTrailers } from "@/lib/tmdb";
 import { MovieDetailModal } from "./MovieDetailModal";
 import Image from "next/image";
 
-export function Hero() {
+export function Hero({ 
+  predefinedTitles, 
+  heroTitle = "ESTRENOS",
+  isLeftAligned = false,
+  showDetails = true,
+  customHeading,
+  headingClassName
+}: { 
+  predefinedTitles?: string[];
+  heroTitle?: string;
+  isLeftAligned?: boolean;
+  showDetails?: boolean;
+  customHeading?: React.ReactNode;
+  headingClassName?: string;
+}) {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -18,27 +32,34 @@ export function Hero() {
   useEffect(() => {
     async function loadHeroMovies() {
       try {
-        const trending = await fetchTrendingMovies();
-        const martyResults = await searchMovie("Marty Supreme");
+        let curated: Movie[] = [];
         
-        let curated = trending.slice(0, 6);
-        
-        if (martyResults.length > 0) {
-          const marty = martyResults[0];
-          // Remove marty if already in trending to avoid duplicates
-          curated = curated.filter(m => m.id !== marty.id);
-          // Insert Marty at index 3 (Orange slot)
-          curated.splice(3, 0, marty);
-          // Keep only 6
-          curated = curated.slice(0, 6);
+        if (predefinedTitles && predefinedTitles.length > 0) {
+          curated = await fetchMoviesByTitle(predefinedTitles);
+        } else {
+          const [nowPlaying, upcoming] = await Promise.all([
+            fetchNowPlayingMovies(),
+            fetchUpcomingMovies()
+          ]);
+          curated = [...nowPlaying.slice(0, 3), ...upcoming.slice(0, 3)];
         }
-        
-        setMovies(curated);
+
+        setMovies(curated.slice(0, 6));
       } catch (error) {
-        console.error("Failed to fetch trending movies:", error);
+        console.error("Failed to fetch hero movies:", error);
       } finally {
         setLoading(false);
       }
+    }
+
+    async function fetchMoviesByTitle(titles: string[]) {
+      const results = await Promise.all(
+        titles.map(async (title) => {
+          const movies = await searchMovie(title);
+          return movies[0]; // Take the first result
+        })
+      );
+      return results.filter(Boolean) as Movie[];
     }
     loadHeroMovies();
   }, []);
@@ -132,47 +153,51 @@ export function Hero() {
           </div>
 
           <div className="relative flex h-full w-full flex-col items-center justify-center px-6 text-center text-white">
-            <div className="w-full max-w-6xl flex flex-col items-center text-center">
+            <div className={`w-full max-w-6xl flex flex-col ${isLeftAligned ? "items-start text-left" : "items-center text-center"}`}>
               <motion.h1
                 initial={{ y: 40, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-6xl font-black uppercase tracking-tighter md:text-[10vw] leading-[0.8] text-theme-primary transition-colors duration-1000 text-center mx-auto"
+                className={`text-6xl font-black uppercase tracking-tighter md:text-[10vw] leading-[0.8] transition-colors duration-1000 ${isLeftAligned ? "" : "text-center mx-auto"} ${!customHeading ? "text-theme-primary" : ""} ${headingClassName || ""}`}
               >
-                {currentMovie.original_title}
+                {customHeading || currentMovie.original_title}
               </motion.h1>
               
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                className="mt-8 h-1 w-24 bg-theme-primary transition-colors duration-1000 mx-auto"
-              />
-              
-              <motion.p
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="mt-8 max-w-2xl text-sm font-light tracking-[0.2em] uppercase text-white/50 md:text-base text-center mx-auto"
-              >
-                {currentMovie.overview.length > 150 
-                  ? `${currentMovie.overview.substring(0, 150)}...` 
-                  : currentMovie.overview}
-              </motion.p>
-              
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.7, duration: 0.8 }}
-                className="mt-12 flex justify-center"
-              >
-                <button 
-                  onClick={() => setSelectedMovie(currentMovie)}
-                  className="rounded-full border-2 border-theme-primary bg-transparent px-14 py-4 font-black tracking-[0.4em] text-theme-primary transition-all duration-500 hover:bg-theme-primary hover:text-white uppercase text-[10px]"
-                >
-                  DETALLES
-                </button>
-              </motion.div>
+              {showDetails && (
+                <>
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 0.4, duration: 0.8 }}
+                    className={`mt-8 h-1 w-24 bg-theme-primary transition-colors duration-1000 ${isLeftAligned ? "" : "mx-auto"}`}
+                  />
+                  
+                  <motion.p
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.5, duration: 0.8 }}
+                    className={`mt-8 max-w-2xl text-sm font-light tracking-[0.2em] uppercase text-white/50 md:text-base ${isLeftAligned ? "" : "text-center mx-auto"}`}
+                  >
+                    {currentMovie.overview.length > 150 
+                      ? `${currentMovie.overview.substring(0, 150)}...` 
+                      : currentMovie.overview}
+                  </motion.p>
+                  
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.7, duration: 0.8 }}
+                    className={`mt-12 flex ${isLeftAligned ? "justify-start" : "justify-center"}`}
+                  >
+                    <button 
+                      onClick={() => setSelectedMovie(currentMovie)}
+                      className="rounded-full border-2 border-theme-primary bg-transparent px-14 py-4 font-black tracking-[0.4em] text-theme-primary transition-all duration-500 hover:bg-theme-primary hover:text-white uppercase text-[10px]"
+                    >
+                      DETALLES
+                    </button>
+                  </motion.div>
+                </>
+              )}
             </div>
           </div>
         </motion.div>
@@ -221,7 +246,7 @@ export function Hero() {
         className="absolute top-32 left-12 z-20 hidden md:block"
       >
         <p className="text-[10px] font-black tracking-[0.5em] uppercase opacity-40 [writing-mode:vertical-lr] rotate-180">
-          GLOBAL TRENDING
+          {heroTitle}
         </p>
       </motion.div>
 

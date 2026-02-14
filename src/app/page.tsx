@@ -8,7 +8,16 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-black">
       <Navbar />
-      <Hero />
+      <Hero 
+        predefinedTitles={[
+          "Avatar: Fuego y Cenizas",
+          "Five Nights at Freddy's 2",
+          "Zootopia 2",
+          "Verdad y Traición",
+          "Hamnet",
+          "Familia en Renta"
+        ]}
+      />
       <MovieGrid />
       
       {/* RBS Identity Section */}

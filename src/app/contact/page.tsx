@@ -1,78 +1,59 @@
 "use client";
 
 import { useTheme } from "@/context/ThemeContext";
-import { Facebook } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
 export default function ContactPage() {
+  const { theme } = useTheme();
 
   return (
-    <main className="min-h-screen bg-black text-white pt-48 px-6 md:px-12">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 pb-24">
-        <section className="space-y-12">
-          <h1 className="text-7xl md:text-[10vw] font-black uppercase tracking-tighter leading-[0.8]">
-            CONTACTO
-          </h1>
-          
-          <div className="space-y-8 pt-8">
-            <div className="space-y-2">
-              <p className="text-xs font-black tracking-[0.4em] text-theme-primary uppercase">EMAIL</p>
-              <p className="text-2xl font-bold">contacto@rbs.com.uy</p>
+    <main className="min-h-screen bg-black text-white selection:bg-theme-primary selection:text-black">
+      <Navbar />
+      <div className="pt-40 pb-20 px-6 md:px-12 max-w-7xl mx-auto">
+        <h1 
+          className="text-7xl md:text-[12vw] font-black uppercase tracking-tighter leading-[0.8] transition-colors duration-1000 mb-12"
+          style={{ color: theme.primary }}
+        >
+          Contacto
+        </h1>
+        <div className="grid md:grid-cols-2 gap-20">
+          <div className="space-y-12">
+            <div>
+              <h3 className="text-sm font-black uppercase tracking-[0.4em] text-white/40 mb-4">Ubicación</h3>
+              <p className="text-2xl font-black uppercase tracking-tighter">Montevideo, Uruguay</p>
             </div>
-            
-            <div className="space-y-2">
-              <p className="text-xs font-black tracking-[0.4em] text-theme-primary uppercase">REDES SOCIALES</p>
-              <div className="flex gap-6">
-                 <a href="#" className="hover:text-theme-primary transition-colors flex items-center gap-2">
-                   <Facebook className="h-5 w-5" />
-                   <span className="text-sm font-bold tracking-widest uppercase">CINELOVERS</span>
-                 </a>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-xs font-black tracking-[0.4em] text-theme-primary uppercase">DIRECCIÓN</p>
-              <p className="text-lg font-light text-white/60">Montevideo, Uruguay</p>
+            <div>
+              <h3 className="text-sm font-black uppercase tracking-[0.4em] text-white/40 mb-4">Email</h3>
+              <p className="text-2xl font-black uppercase tracking-tighter">info@rbs.com.uy</p>
             </div>
           </div>
-        </section>
-
-        <section className="bg-white/5 p-12 rounded-sm border border-white/10">
-          <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
-            <div className="space-y-2">
-              <label className="text-xs font-black tracking-[0.2em] uppercase text-white/20">NOMBRE</label>
-              <input 
-                type="text" 
-                className="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none font-light uppercase tracking-widest text-sm"
-                placeholder="TU NOMBRE"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <label className="text-xs font-black tracking-[0.2em] uppercase text-white/20">EMAIL</label>
-              <input 
-                type="email" 
-                className="w-full bg-transparent border-b border-white/10 py-2 focus:border-white transition-colors outline-none font-light uppercase tracking-widest text-sm"
-                placeholder="TU@EMAIL.COM"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-black tracking-[0.2em] uppercase text-white/20">MENSAJE</label>
-              <textarea 
-                rows={4}
-                className="w-full bg-transparent border border-white/10 p-4 focus:border-white transition-colors outline-none font-light uppercase tracking-widest text-sm resize-none"
-                placeholder="¿CÓMO PODEMOS AYUDARTE?"
-              />
-            </div>
-
+          <form className="space-y-6">
+            <input 
+              type="text" 
+              placeholder="NOMBRE" 
+              className="w-full bg-transparent border-b border-white/10 py-4 font-black uppercase tracking-widest focus:border-theme-primary outline-none transition-colors"
+            />
+            <input 
+              type="email" 
+              placeholder="EMAIL" 
+              className="w-full bg-transparent border-b border-white/10 py-4 font-black uppercase tracking-widest focus:border-theme-primary outline-none transition-colors"
+            />
+            <textarea 
+              placeholder="MENSAJE" 
+              rows={4}
+              className="w-full bg-transparent border-b border-white/10 py-4 font-black uppercase tracking-widest focus:border-theme-primary outline-none transition-colors"
+            />
             <button 
-              className="w-full bg-white py-6 font-black tracking-tighter text-black hover:scale-[1.02] transition-transform uppercase"
+              className="px-12 py-4 font-black uppercase tracking-widest border transition-all duration-300 hover:bg-theme-primary hover:text-white"
+              style={{ borderColor: theme.primary, color: theme.primary }}
             >
-              ENVIAR MENSAJE
+              Enviar
             </button>
           </form>
-        </section>
+        </div>
       </div>
+      <Footer />
     </main>
   );
 }

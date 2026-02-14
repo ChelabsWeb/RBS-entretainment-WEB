@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Plus, Loader2, Star, Calendar, ChevronRight } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
-import { fetchPopularMovies, getImageUrl, Movie } from "@/lib/tmdb";
+import { fetchNowPlayingMovies, getImageUrl, Movie } from "@/lib/tmdb";
 import { MovieDetailModal } from "./MovieDetailModal";
 import Image from "next/image";
 
@@ -122,7 +122,7 @@ export function MovieGrid() {
   useEffect(() => {
     async function loadMovies() {
       try {
-        const data = await fetchPopularMovies();
+        const data = await fetchNowPlayingMovies();
         setMovies(data.slice(0, 10)); // Adjusted count for list view
       } catch (error) {
         console.error("Failed to fetch movies:", error);
@@ -149,13 +149,13 @@ export function MovieGrid() {
             CATÁLOGO 2026
           </h2>
           <p className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-[0.8]">
-            SENSACIONES <br />
-            <span className="italic font-light text-theme-primary transition-colors duration-1000">GLOBALES</span>
+            CARTELERA <br />
+            <span className="italic font-light text-theme-primary transition-colors duration-1000">DE ESTRENOS</span>
           </p>
         </div>
         <div className="text-right">
            <p className="text-xs font-bold tracking-[0.2em] uppercase text-white/20 mb-4 max-w-xs">
-              EXPLORA NUESTRA SELECCIÓN CURADA DE LOS MEJORES ESTRENOS INTERNACIONALES.
+              EXPLORA NUESTRA SELECCIÓN CURADA DE LOS MEJORES ESTRENOS EN CARTEL.
            </p>
            <button className="text-xs font-black tracking-[0.3em] uppercase text-white/40 transition-colors hover:text-theme-primary border-b-2 border-white/5 pb-1">
             VER TODAS LAS PELÍCULAS
