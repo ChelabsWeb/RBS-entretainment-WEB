@@ -2,6 +2,14 @@ const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 
+// Licensed Distributor IDs
+export const DISTRIBUTOR_IDS = {
+  DISNEY: [2, 3, 1, 420], // Disney, Pixar, Lucasfilm, Marvel
+  UNIVERSAL: [33, 521, 6704] // Universal, DreamWorks, Illumination
+};
+
+const ALL_DISTRIBUTOR_IDS = [...DISTRIBUTOR_IDS.DISNEY, ...DISTRIBUTOR_IDS.UNIVERSAL];
+
 export interface Movie {
   id: number;
   title: string;
@@ -13,7 +21,7 @@ export interface Movie {
   vote_average: number;
 }
 
-export const getImageUrl = (path: string, size: 'w500' | 'original' = 'w500') => {
+export const getImageUrl = (path: string, size: 'w92' | 'w185' | 'w500' | 'original' = 'w500') => {
   if (!path) return '';
   return `${IMAGE_BASE_URL}/${size}${path}`;
 };
@@ -77,4 +85,32 @@ export async function searchMovie(query: string): Promise<Movie[]> {
   );
   const data = await response.json() as { results: Movie[] };
   return data.results;
+}
+
+export async function searchLicensedMovies(query: string): Promise<Movie[]> {
+  const basicResults = await searchMovie(query);
+  
+  // Filter only top results to avoid excessive API calls
+  const topResults = basicResults.slice(0, 10);
+  
+  const detailedResults = await Promise.all(
+    topResults.map(async (movie) => {
+      try {
+        const response = await fetch(
+          `${TMDB_BASE_URL}/movie/${movie.id}?api_key=${TMDB_API_KEY}`
+        );
+        const details = await response.json() as { production_companies: { id: number }[] };
+        
+        const isFromLicensedDistributor = details.production_companies?.some(
+          (company) => ALL_DISTRIBUTOR_IDS.includes(company.id)
+        );
+        
+        return isFromLicensedDistributor ? movie : null;
+      } catch (error) {
+        return null;
+      }
+    })
+  );
+  
+  return detailedResults.filter(Boolean) as Movie[];
 }
