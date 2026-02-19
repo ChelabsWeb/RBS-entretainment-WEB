@@ -56,7 +56,7 @@ export function Hero({
       const results = await Promise.all(
         titles.map(async (title) => {
           const movies = await searchMovie(title);
-          return movies[0]; // Take the first result
+          return movies?.[0]; // Take the first result safely
         })
       );
       return results.filter(Boolean) as Movie[];
@@ -126,6 +126,10 @@ export function Hero({
         <Loader2 className="h-12 w-12 text-white animate-spin opacity-20" />
       </section>
     );
+  }
+
+  if (movies.length === 0) {
+    return null; // Don't render anything if no movies are found to prevent crashes
   }
 
   const currentMovie = movies[currentSlide];

@@ -136,7 +136,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor }: MovieDe
               {/* Bottom: Compact Synopsis */}
               <div className="space-y-4 max-w-2xl">
                  <h4 className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20">SINOPSIS</h4>
-                 <DialogDescription className="text-sm md:text-base font-light leading-relaxed text-white/50 italic">
+                 <DialogDescription className="text-sm md:text-base font-light leading-relaxed text-white/50">
                   {movie.overview}
                  </DialogDescription>
               </div>
@@ -202,7 +202,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor }: MovieDe
                     <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20">DISTRIBUCIÓN</p>
                     <div className="flex items-baseline gap-2">
                        <span className="text-xl font-black tracking-tighter uppercase">RBS</span>
-                       <span className="text-[8px] font-bold tracking-[0.6em] uppercase opacity-20 italic">Uruguay</span>
+                       <span className="text-[8px] font-bold tracking-[0.6em] uppercase opacity-20">Uruguay</span>
                     </div>
                  </div>
 
@@ -210,7 +210,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor }: MovieDe
                     RESERVAR TICKETS
                  </button>
 
-                 <p className="text-center text-[7px] font-black tracking-[1em] text-white/10 uppercase italic pt-4">
+                 <p className="text-center text-[7px] font-black tracking-[1em] text-white/10 uppercase pt-4">
                     CINEMA EXPERIENCE
                  </p>
               </div>

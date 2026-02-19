@@ -5,8 +5,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Plus, Loader2, Star, Calendar, ChevronRight } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
-import { fetchNowPlayingMovies, getImageUrl, Movie } from "@/lib/tmdb";
+import { fetchNowPlayingMovies, getImageUrl, Movie, searchMovie } from "@/lib/tmdb";
 import { MovieDetailModal } from "./MovieDetailModal";
+import Link from "next/link";
 import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -113,7 +114,7 @@ function MovieCard({
   );
 }
 
-export function MovieGrid() {
+export function MovieGrid({ predefinedTitles }: { predefinedTitles?: string[] }) {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
@@ -122,8 +123,20 @@ export function MovieGrid() {
   useEffect(() => {
     async function loadMovies() {
       try {
-        const data = await fetchNowPlayingMovies();
-        setMovies(data.slice(0, 10)); // Adjusted count for list view
+        let curated: Movie[] = [];
+        
+        if (predefinedTitles && predefinedTitles.length > 0) {
+          curated = await Promise.all(
+            predefinedTitles.map(async (title) => {
+              const results = await searchMovie(title);
+              return results?.[0];
+            })
+          ).then(res => res.filter(Boolean) as Movie[]);
+        } else {
+          curated = await fetchNowPlayingMovies();
+        }
+
+        setMovies(curated.slice(0, 3)); // strictly limit to 3 as requested
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       } finally {
@@ -131,7 +144,7 @@ export function MovieGrid() {
       }
     }
     loadMovies();
-  }, []);
+  }, [predefinedTitles]);
 
   if (loading) {
     return (
@@ -143,23 +156,23 @@ export function MovieGrid() {
 
   return (
     <section id="movies" className="bg-black py-32 px-6 md:px-12 border-t border-white/5">
-      <div className="mb-24 flex flex-col md:flex-row items-end justify-between gap-8 border-b border-white/10 pb-12">
+      <div className="mb-24 flex flex-col md:flex-row items-center justify-between gap-8 border-b border-white/10 pb-12">
         <div className="space-y-4">
           <h2 className="text-sm font-bold tracking-[0.6em] uppercase text-white/40">
             CATÁLOGO 2026
           </h2>
           <p className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-[0.8]">
-            CARTELERA <br />
-            <span className="italic font-light text-theme-primary transition-colors duration-1000">DE ESTRENOS</span>
+            ESTRENOS <br />
+            <span className="font-light text-theme-primary transition-colors duration-1000">RECOMENDADOS</span>
           </p>
         </div>
-        <div className="text-right">
-           <p className="text-xs font-bold tracking-[0.2em] uppercase text-white/20 mb-4 max-w-xs">
+        <div className="text-right space-y-4">
+           <p className="text-xs font-bold tracking-[0.2em] uppercase text-white/20 max-w-xs ml-auto">
               EXPLORA NUESTRA SELECCIÓN CURADA DE LOS MEJORES ESTRENOS EN CARTEL.
            </p>
-           <button className="text-xs font-black tracking-[0.3em] uppercase text-white/40 transition-colors hover:text-theme-primary border-b-2 border-white/5 pb-1">
+           <Link href="/peliculas" className="inline-block text-xs font-black tracking-[0.3em] uppercase text-theme-primary border-b-2 border-theme-primary/20 pb-1 hover:border-theme-primary transition-colors">
             VER TODAS LAS PELÍCULAS
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -178,14 +191,17 @@ export function MovieGrid() {
         ))}
       </div>
 
-      {/* Load More Button */}
+      {/* View All Movies Button */}
       <div className="mt-24 flex justify-center">
-        <button className="group relative px-12 py-6 rounded-full overflow-hidden border border-white/10 transition-all hover:border-theme-primary">
+        <Link 
+          href="/peliculas"
+          className="group relative px-12 py-6 rounded-full overflow-hidden border border-white/10 transition-all hover:border-theme-primary"
+        >
             <span className="relative z-10 text-xs font-black tracking-[0.4em] uppercase text-white group-hover:text-black transition-colors">
-              CARGAR MÁS ESTRENOS
+              VER TODOS LOS ESTRENOS
             </span>
             <div className="absolute inset-0 -z-0 bg-theme-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo" />
-        </button>
+        </Link>
       </div>
 
       <MovieDetailModal 
