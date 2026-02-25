@@ -200,7 +200,7 @@ export function Navbar() {
               { name: "PELÍCULAS", href: "/peliculas" },
               { name: "LICENCIAS", href: "/licensing" },
               { name: "QUIÉNES SOMOS", href: "/about" },
-              { name: "CONTACTO", href: "/contact" }
+              { name: "CONTACTO", href: "/#contacto" }
             ].map((item) => (
               <Link
                 key={item.name}

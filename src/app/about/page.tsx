@@ -10,26 +10,16 @@ export default function AboutPage() {
   return (
     <main className="min-h-screen bg-black text-white selection:bg-theme-primary selection:text-black">
       <Navbar />
-      <div className="pt-40 pb-20 px-6 md:px-12 max-w-7xl mx-auto">
+      <div className="pt-40 pb-20 flex flex-col items-center justify-center min-h-[70vh]">
         <h1 
-          className="text-7xl md:text-[12vw] font-black uppercase tracking-tighter leading-[0.8] transition-colors duration-1000 mb-12"
+          className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-6 text-center transition-colors duration-1000"
           style={{ color: theme.primary }}
         >
-          Nosotros
+          En Construcción
         </h1>
-        <div className="space-y-20">
-          <section className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="aspect-video bg-white/5 border border-white/10 flex items-center justify-center">
-              <span className="text-2xl font-black uppercase tracking-widest opacity-20">RBS Vision</span>
-            </div>
-            <div className="space-y-6">
-              <h2 className="text-4xl font-black uppercase tracking-tighter">Nuestra Historia</h2>
-              <p className="text-xl text-white/60 leading-relaxed">
-                RBS Entertainment nació con la visión de llevar el mejor cine internacional a las audiencias uruguayas. Con décadas de experiencia, nos hemos consolidado como un referente en la distribución de cine de calidad.
-              </p>
-            </div>
-          </section>
-        </div>
+        <p className="text-xl text-white/60 text-center uppercase tracking-widest">
+          Próximamente disponible
+        </p>
       </div>
       <Footer />
     </main>
