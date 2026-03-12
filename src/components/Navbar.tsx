@@ -84,7 +84,7 @@ export function Navbar() {
             "flex-1 flex justify-center transition-all duration-300 z-10",
             isSearchOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
           )}>
-            <Link href="/" className="relative h-10 w-48 cursor-pointer flex items-center justify-center">
+            <Link href="/" className="relative h-8 md:h-10 w-32 md:w-48 cursor-pointer flex items-center justify-center">
               <Image 
                 src={logoSrc} 
                 alt="RBS Entertainment" 
@@ -101,7 +101,7 @@ export function Navbar() {
           {/* Search Container - Centered when open */}
           <div className={clsx(
             "absolute inset-x-0 mx-auto flex items-center justify-center transition-all duration-500 pointer-events-none z-20",
-            isSearchOpen ? "w-[80%] max-w-md opacity-100" : "w-0 opacity-0"
+            isSearchOpen ? "w-[90%] md:w-[80%] max-w-md opacity-100" : "w-0 opacity-0"
           )}>
             <div className={clsx(
               "flex items-center bg-black/5 rounded-full px-4 py-2 transition-all duration-500 h-9 relative pointer-events-auto",
@@ -205,7 +205,7 @@ export function Navbar() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-6xl md:text-8xl font-black tracking-tighter uppercase text-white hover:text-theme-primary transition-all duration-300 hover:scale-105"
+                className="text-4xl md:text-8xl font-black tracking-tighter uppercase text-white hover:text-theme-primary transition-all duration-300 hover:scale-105 py-2 md:py-0 text-center leading-[0.85] md:leading-none"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}

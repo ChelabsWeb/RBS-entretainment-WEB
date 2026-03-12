@@ -13,13 +13,13 @@ export default function LicensingPage() {
       <Navbar />
       <div className="pt-48 pb-32 px-6 md:px-12 max-w-[1400px] mx-auto space-y-24">
         <h1 
-          className="text-7xl md:text-[12vw] font-black uppercase tracking-tighter leading-[0.8] transition-colors duration-1000 mb-12"
+          className="text-5xl sm:text-6xl md:text-[10vw] font-black uppercase tracking-tighter leading-[0.8] transition-colors duration-1000 mb-12 text-center"
           style={{ color: theme.primary }}
         >
           Licencias
         </h1>
         <div className="grid md:grid-cols-2 gap-20 mb-24">
-          <div className="space-y-6 text-xl text-white/60 leading-relaxed">
+          <div className="space-y-6 text-xl text-white/60 leading-relaxed text-center">
             <p>
               Desde nuestros inicios en 1997, nos hemos consolidado como agencia especializada, trabajando en proyectos diseñados a medida para cada marca o grupo de marcas.
             </p>

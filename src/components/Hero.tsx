@@ -162,7 +162,7 @@ export function Hero({
                 initial={{ y: 40, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className={`text-6xl font-black uppercase tracking-tighter md:text-[10vw] leading-[0.8] transition-colors duration-1000 ${isLeftAligned ? "" : "text-center mx-auto"} ${!customHeading ? "text-theme-primary" : ""} ${headingClassName || ""}`}
+                className={`text-5xl md:text-6xl lg:text-[10vw] font-black uppercase tracking-tighter leading-[0.8] transition-colors duration-1000 ${isLeftAligned ? "" : "text-center mx-auto"} ${!customHeading ? "text-theme-primary" : ""} ${headingClassName || ""}`}
               >
                 {customHeading || currentMovie.original_title}
               </motion.h1>
@@ -180,7 +180,7 @@ export function Hero({
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.5, duration: 0.8 }}
-                    className={`mt-8 max-w-2xl text-sm font-light tracking-[0.2em] uppercase text-white/50 md:text-base ${isLeftAligned ? "" : "text-center mx-auto"}`}
+                    className={`mt-8 max-w-2xl text-xs md:text-sm font-light tracking-[0.2em] uppercase text-white/50 lg:text-base ${isLeftAligned ? "" : "text-center mx-auto"}`}
                   >
                     {currentMovie.overview.length > 150 
                       ? `${currentMovie.overview.substring(0, 150)}...` 
@@ -191,13 +191,19 @@ export function Hero({
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.7, duration: 0.8 }}
-                    className={`mt-12 flex ${isLeftAligned ? "justify-start" : "justify-center"}`}
+                    className={`mt-12 flex flex-col gap-6 ${isLeftAligned ? "items-start" : "items-center"}`}
                   >
                     <button 
                       onClick={() => setSelectedMovie(currentMovie)}
-                      className="rounded-full border-2 border-theme-primary bg-transparent px-14 py-4 font-black tracking-[0.4em] text-theme-primary transition-all duration-500 hover:bg-theme-primary hover:text-white uppercase text-[10px]"
+                      className="rounded-full border-2 border-theme-primary bg-transparent px-8 md:px-14 py-3 md:py-4 font-black tracking-[0.4em] text-theme-primary transition-all duration-500 hover:bg-theme-primary hover:text-white uppercase text-[10px]"
                     >
                       DETALLES
+                    </button>
+                    <button
+                      onClick={handlePlayTrailer}
+                      className="group flex h-16 w-16 items-center justify-center rounded-full border-2 border-theme-primary bg-transparent text-theme-primary shadow-2xl transition-all duration-500 hover:scale-110 hover:bg-theme-primary hover:text-white active:scale-95"
+                    >
+                      <Play className="h-6 w-6 ml-1 fill-current" />
                     </button>
                   </motion.div>
                 </>
@@ -222,7 +228,7 @@ export function Hero({
         </button>
       </div>
 
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
+      <div className="absolute bottom-6 md:bottom-12 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3">
         {movies.map((_, i) => (
           <button
             key={i}
@@ -236,14 +242,6 @@ export function Hero({
         ))}
       </div>
 
-      <div className="absolute bottom-12 left-12 z-20">
-        <button
-          onClick={handlePlayTrailer}
-          className="group flex h-16 w-16 items-center justify-center rounded-full border-2 border-theme-primary bg-transparent text-theme-primary shadow-2xl transition-all duration-500 hover:scale-110 hover:bg-theme-primary hover:text-white active:scale-95"
-        >
-          <Play className="h-6 w-6 fill-current" />
-        </button>
-      </div>
 
       <motion.div 
         animate={{ color: "#ffffff" }}

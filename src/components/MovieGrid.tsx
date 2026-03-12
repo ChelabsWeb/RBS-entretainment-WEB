@@ -57,7 +57,7 @@ function MovieCard({
       onClick={onClick}
     >
       {/* Horizontal Image Section */}
-      <div className="relative aspect-[2/3] w-full md:w-64 shrink-0 overflow-hidden rounded-sm bg-zinc-900 shadow-2xl">
+      <div className="relative aspect-[2/3] w-[60%] mx-auto md:mx-0 md:w-64 shrink-0 overflow-hidden rounded-sm bg-zinc-900 shadow-2xl">
         <Image
           src={getImageUrl(movie.poster_path, "w500")}
           alt={movie.title}
@@ -156,23 +156,27 @@ export function MovieGrid({ predefinedTitles }: { predefinedTitles?: string[] })
 
   return (
     <section id="movies" className="bg-black py-32 px-6 md:px-12 border-t border-white/5">
-      <div className="mb-24 flex flex-col md:flex-row items-center justify-between gap-8 border-b border-white/10 pb-12">
-        <div className="space-y-4">
+      <div className="mb-24 flex flex-col gap-12 border-b border-white/10 pb-12">
+        <div className="w-full text-left">
           <h2 className="text-sm font-bold tracking-[0.6em] uppercase text-white/40">
             CATÁLOGO 2026
           </h2>
-          <p className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-[0.8]">
+        </div>
+        
+        <div className="flex flex-col items-center justify-center space-y-8 text-center w-full">
+          <p className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-[0.8]">
             ESTRENOS <br />
             <span className="font-light text-theme-primary transition-colors duration-1000">RECOMENDADOS</span>
           </p>
-        </div>
-        <div className="text-right space-y-4">
-           <p className="text-xs font-bold tracking-[0.2em] uppercase text-white/20 max-w-xs ml-auto">
-              EXPLORA NUESTRA SELECCIÓN CURADA DE LOS MEJORES ESTRENOS EN CARTEL.
-           </p>
-           <Link href="/peliculas" className="inline-block text-xs font-black tracking-[0.3em] uppercase text-theme-primary border-b-2 border-theme-primary/20 pb-1 hover:border-theme-primary transition-colors">
-            VER TODAS LAS PELÍCULAS
-          </Link>
+          
+          <div className="space-y-4 flex flex-col items-center">
+             <p className="text-xs font-bold tracking-[0.2em] uppercase text-white/20 max-w-md">
+                EXPLORA NUESTRA SELECCIÓN CURADA DE LOS MEJORES ESTRENOS EN CARTEL.
+             </p>
+             <Link href="/peliculas" className="inline-block text-xs font-black tracking-[0.3em] uppercase text-theme-primary border-b-2 border-theme-primary/20 pb-1 hover:border-theme-primary transition-colors">
+              VER TODAS LAS PELÍCULAS
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -195,9 +199,9 @@ export function MovieGrid({ predefinedTitles }: { predefinedTitles?: string[] })
       <div className="mt-24 flex justify-center">
         <Link 
           href="/peliculas"
-          className="group relative px-12 py-6 rounded-full overflow-hidden border border-white/10 transition-all hover:border-theme-primary"
+          className="group relative inline-flex items-center justify-center px-8 md:px-12 py-5 md:py-6 rounded-full overflow-hidden border border-white/10 transition-all hover:border-theme-primary text-center"
         >
-            <span className="relative z-10 text-xs font-black tracking-[0.4em] uppercase text-white group-hover:text-black transition-colors">
+            <span className="relative z-10 text-xs font-black tracking-[0.2em] md:tracking-[0.4em] uppercase text-white group-hover:text-black transition-colors whitespace-nowrap">
               VER TODOS LOS ESTRENOS
             </span>
             <div className="absolute inset-0 -z-0 bg-theme-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo" />
