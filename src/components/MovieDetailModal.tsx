@@ -7,8 +7,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { fetchMovieDetails, getImageUrl, Movie } from "@/lib/tmdb";
-import { Star, Calendar, Users, Loader2, Play, X, ChevronRight } from "lucide-react";
+import { fetchMovieDetails, getImageUrl, Movie } from "@/lib/movies";
+import { Star, Calendar, Users, Loader2, Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useTheme } from "@/context/ThemeContext";
 
@@ -17,6 +17,9 @@ interface MovieDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   themeColor?: string;
+  movies?: Movie[];
+  currentIndex?: number;
+  onNavigate?: (movie: Movie, index: number) => void;
 }
 
 interface TMDBMovieDetails {
@@ -36,18 +39,36 @@ interface TMDBMovieDetails {
   };
 }
 
-export function MovieDetailModal({ movie, isOpen, onClose, themeColor }: MovieDetailModalProps) {
+const CINEMA_EXHIBITORS = [
+  { name: "Movie", short: "MOV", color: "#FF6B35", linkKey: "link_movie" },
+  { name: "Life Cinemas", short: "LIFE", color: "#e5361f", linkKey: "link_life_cinemas" },
+  { name: "Grupo Cine", short: "GC", color: "#4f5ea7", linkKey: "link_grupo_cine" },
+  { name: "Cines del Este", short: "ESTE", color: "#2ba137", linkKey: "link_cines_del_este" },
+];
+
+export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, currentIndex = 0, onNavigate }: MovieDetailModalProps) {
   const [details, setDetails] = useState<TMDBMovieDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const { setTheme } = useTheme();
+
+  const handlePrev = () => {
+    if (!movies || !onNavigate) return;
+    const prevIndex = currentIndex === 0 ? movies.length - 1 : currentIndex - 1;
+    onNavigate(movies[prevIndex], prevIndex);
+  };
+  const handleNext = () => {
+    if (!movies || !onNavigate) return;
+    const nextIndex = currentIndex === movies.length - 1 ? 0 : currentIndex + 1;
+    onNavigate(movies[nextIndex], nextIndex);
+  };
 
   useEffect(() => {
     if (movie && isOpen && themeColor) {
       setTheme({
         primary: themeColor,
         secondary: "#000000",
-        text: movie.id % 2 === 0 ? "#000000" : "#ffffff", // Standard logic
+        text: String(movie.id).length % 2 === 0 ? "#000000" : "#ffffff",
       });
     }
   }, [movie, isOpen, themeColor, setTheme]);
@@ -80,10 +101,28 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor }: MovieDe
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent showCloseButton={false} className="max-w-[95vw] lg:max-w-6xl border-white/5 bg-zinc-950 p-0 text-white overflow-y-auto lg:overflow-hidden max-h-[92vh] shadow-[0_0_100px_rgba(0,0,0,1)]">
-        
+      <DialogContent showCloseButton={false} className="max-w-[95vw] lg:max-w-6xl border-white/5 bg-zinc-950 p-0 text-white overflow-y-auto lg:overflow-visible max-h-[92vh] shadow-[0_0_100px_rgba(0,0,0,1)]">
+
+        {/* Side navigation arrows — positioned outside the modal box on desktop */}
+        {movies && onNavigate && (
+          <>
+            <button
+              onClick={handlePrev}
+              className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[calc(100%+20px)] z-[60] items-center justify-center rounded-full bg-black/70 border border-white/15 p-4 backdrop-blur-xl text-white transition-all duration-300 hover:bg-theme-primary hover:border-theme-primary hover:scale-110 active:scale-95"
+            >
+              <ChevronLeft className="h-9 w-9" />
+            </button>
+            <button
+              onClick={handleNext}
+              className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-[calc(100%+20px)] z-[60] items-center justify-center rounded-full bg-black/70 border border-white/15 p-4 backdrop-blur-xl text-white transition-all duration-300 hover:bg-theme-primary hover:border-theme-primary hover:scale-110 active:scale-95"
+            >
+              <ChevronRight className="h-9 w-9" />
+            </button>
+          </>
+        )}
+
         {/* Close Button */}
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-6 right-6 z-[60] rounded-full bg-white/5 p-2 backdrop-blur-3xl transition-all hover:bg-theme-primary hover:text-white active:scale-90"
         >
@@ -206,6 +245,49 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor }: MovieDe
                     </div>
                  </div>
 
+                 <div className="space-y-3">
+                    <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20">DISPONIBLE EN</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {CINEMA_EXHIBITORS.map((cinema) => {
+                        const link = movie._supabase?.[cinema.linkKey as keyof typeof movie._supabase] as string | null | undefined;
+                        return link ? (
+                          <a
+                            key={cinema.name}
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group flex items-center gap-2 px-3 py-2.5 rounded-sm border border-white/10 hover:border-white/30 transition-all duration-300 bg-white/[0.02] hover:bg-white/5"
+                          >
+                            <div
+                              className="h-6 w-6 rounded-sm flex items-center justify-center text-white text-[7px] font-black tracking-tight flex-shrink-0"
+                              style={{ backgroundColor: cinema.color }}
+                            >
+                              {cinema.short.slice(0, 2)}
+                            </div>
+                            <span className="text-[8px] font-black tracking-[0.15em] uppercase text-white/50 group-hover:text-white transition-colors truncate">
+                              {cinema.name}
+                            </span>
+                          </a>
+                        ) : (
+                          <div
+                            key={cinema.name}
+                            className="flex items-center gap-2 px-3 py-2.5 rounded-sm border border-white/5 bg-white/[0.01] opacity-40 cursor-not-allowed"
+                          >
+                            <div
+                              className="h-6 w-6 rounded-sm flex items-center justify-center text-white text-[7px] font-black tracking-tight flex-shrink-0 grayscale"
+                              style={{ backgroundColor: cinema.color }}
+                            >
+                              {cinema.short.slice(0, 2)}
+                            </div>
+                            <span className="text-[8px] font-black tracking-[0.15em] uppercase text-white/30 truncate">
+                              {cinema.name}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                 </div>
+
                  <button className="w-full relative group overflow-hidden px-6 py-4 rounded-full bg-white text-black text-[9px] font-black tracking-[0.4em] uppercase transition-all hover:bg-theme-primary hover:text-white active:scale-95 shadow-xl">
                     RESERVAR TICKETS
                  </button>
@@ -219,6 +301,29 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor }: MovieDe
           </div>
 
         </div>
+
+        {/* Mobile navigation bar — visible only on small screens */}
+        {movies && onNavigate && (
+          <div className="flex lg:hidden items-center justify-between px-6 py-4 border-t border-white/10 bg-black/80 backdrop-blur-xl">
+            <button
+              onClick={handlePrev}
+              className="flex items-center gap-2 text-[10px] font-black tracking-[0.2em] uppercase text-white/50 hover:text-white transition-colors"
+            >
+              <ChevronLeft className="h-5 w-5" />
+              ANTERIOR
+            </button>
+            <span className="text-[10px] font-black tracking-[0.2em] text-white/20">
+              {(currentIndex ?? 0) + 1} / {movies.length}
+            </span>
+            <button
+              onClick={handleNext}
+              className="flex items-center gap-2 text-[10px] font-black tracking-[0.2em] uppercase text-white/50 hover:text-white transition-colors"
+            >
+              SIGUIENTE
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, Loader2, X } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
-import { fetchNowPlayingMovies, fetchUpcomingMovies, getImageUrl, Movie, searchMovie, fetchMovieTrailers } from "@/lib/tmdb";
+import { fetchNowPlayingMovies, fetchUpcomingMovies, getImageUrl, Movie, searchMovie, fetchMovieTrailers } from "@/lib/movies";
 import { MovieDetailModal } from "./MovieDetailModal";
 import Image from "next/image";
 
@@ -158,15 +158,35 @@ export function Hero({
 
           <div className="relative flex h-full w-full flex-col items-center justify-center px-6 text-center text-white">
             <div className={`w-full max-w-6xl flex flex-col ${isLeftAligned ? "items-start text-left" : "items-center text-center"}`}>
-              <motion.h1
-                initial={{ y: 40, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className={`text-5xl md:text-6xl lg:text-[10vw] font-black uppercase tracking-tighter leading-[0.8] transition-colors duration-1000 ${isLeftAligned ? "" : "text-center mx-auto"} ${!customHeading ? "text-theme-primary" : ""} ${headingClassName || ""}`}
-              >
-                {customHeading || currentMovie.original_title}
-              </motion.h1>
-              
+              {customHeading ? (
+                <motion.h1
+                  initial={{ y: 40, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.8 }}
+                  className={`text-5xl md:text-6xl lg:text-[10vw] font-black uppercase tracking-tighter leading-[0.8] transition-colors duration-1000 ${isLeftAligned ? "" : "text-center mx-auto"} ${headingClassName || ""}`}
+                >
+                  {customHeading}
+                </motion.h1>
+              ) : currentMovie.distributor_logo ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.8 }}
+                  className={`${isLeftAligned ? "" : "mx-auto"}`}
+                >
+                  <Image
+                    src={currentMovie.distributor_logo}
+                    alt="Logo distribuidor"
+                    width={600}
+                    height={240}
+                    className="object-contain opacity-[0.12] w-[60vw] max-w-xl md:max-w-2xl lg:max-w-3xl select-none pointer-events-none"
+                    priority
+                  />
+                </motion.div>
+              ) : (
+                <div className="h-32 md:h-48 lg:h-64" />
+              )}
+
               {showDetails && (
                 <>
                   <motion.div
@@ -175,16 +195,14 @@ export function Hero({
                     transition={{ delay: 0.4, duration: 0.8 }}
                     className={`mt-8 h-1 w-24 bg-theme-primary transition-colors duration-1000 ${isLeftAligned ? "" : "mx-auto"}`}
                   />
-                  
+
                   <motion.p
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.5, duration: 0.8 }}
                     className={`mt-8 max-w-2xl text-xs md:text-sm font-light tracking-[0.2em] uppercase text-white/50 lg:text-base ${isLeftAligned ? "" : "text-center mx-auto"}`}
                   >
-                    {currentMovie.overview.length > 150 
-                      ? `${currentMovie.overview.substring(0, 150)}...` 
-                      : currentMovie.overview}
+                    {currentMovie.title}
                   </motion.p>
                   
                   <motion.div

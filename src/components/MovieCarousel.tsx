@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { Movie, getImageUrl } from "@/lib/tmdb";
+import { Movie, getImageUrl } from "@/lib/movies";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 

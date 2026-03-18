@@ -4,38 +4,13 @@ import { useEffect, useState, Suspense } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { MovieCarousel } from "@/components/MovieCarousel";
-import { Movie, searchMovie, searchLicensedMovies } from "@/lib/tmdb";
+import { Movie, searchLicensedMovies, fetchNowPlayingMovies, fetchUpcomingMovies } from "@/lib/movies";
 import { MovieDetailModal } from "@/components/MovieDetailModal";
 import { Hero } from "@/components/Hero";
 import { Loader2, SearchX } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { useLenis } from "lenis/react";
 import clsx from "clsx";
-
-const EN_CARTEL_TITLES = [
-  "Avatar: Fuego y Cenizas",
-  "Five Nights at Freddy's 2",
-  "Zootopia 2",
-  "Verdad y Traición",
-  "Stray Kids: The dominATE Experience",
-  "Hamnet",
-  "Ayuda!",
-  "Familia en Renta",
-  "Bob Esponja: En busca de los pantalones cuadrados"
-];
-
-const PROXIMOS_ESTRENOS_TITLES = [
-  "No te olvidaré",
-  "Scream 7",
-  "Está Funcionando Esto?",
-  "El Diablo Se Viste a la Moda 2",
-  "Michael",
-  "David",
-  "Boda Sangrienta 2",
-  "Playa de Lobos",
-  "Super Mario Galaxy: La Película",
-  "EPiC: Elvis Presley in Concert",
-  "Hoppers: Operación Castor"
-];
 
 function PeliculasContent() {
   const [enCartel, setEnCartel] = useState<Movie[]>([]);
@@ -45,32 +20,29 @@ function PeliculasContent() {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q");
+  const lenis = useLenis();
+
+  // Resize Lenis when dynamic content loads
+  useEffect(() => {
+    if (!loading && lenis) {
+      lenis.resize();
+    }
+  }, [loading, lenis, enCartel, proximos, searchResults]);
 
   useEffect(() => {
     async function loadMovies() {
       setLoading(true);
       try {
-        const fetchMoviesByTitle = async (titles: string[]) => {
-          const results = await Promise.all(
-            titles.map(async (title) => {
-              const movies = await searchMovie(title);
-              return movies[0]; // Take the first result
-            })
-          );
-          return results.filter(Boolean) as Movie[];
-        };
-
         if (searchQuery) {
           const results = await searchLicensedMovies(searchQuery);
           setSearchResults(results || []);
-          // Clear other carousels when search is active
           setEnCartel([]);
           setProximos([]);
         } else {
           setSearchResults([]);
           const [enCartelData, proximosData] = await Promise.all([
-            fetchMoviesByTitle(EN_CARTEL_TITLES),
-            fetchMoviesByTitle(PROXIMOS_ESTRENOS_TITLES)
+            fetchNowPlayingMovies(),
+            fetchUpcomingMovies()
           ]);
           setEnCartel(enCartelData);
           setProximos(proximosData);
@@ -90,7 +62,7 @@ function PeliculasContent() {
       <Navbar />
       
       {!searchQuery && (
-        <Hero 
+        <Hero
           heroTitle="PROXIMOS ESTRENOS"
           isLeftAligned={true}
           showDetails={false}
@@ -98,14 +70,6 @@ function PeliculasContent() {
           customHeading={
             <span className="text-white">CINE</span>
           }
-          predefinedTitles={[
-            "No te olvidaré",
-            "Scream 7",
-            "El Diablo Se Viste a la Moda 2",
-            "Michael",
-            "Boda Sangrienta 2",
-            "Super Mario Galaxy: La Película"
-          ]}
         />
       )}
       

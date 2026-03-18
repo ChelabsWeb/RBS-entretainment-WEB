@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="750" viewBox="0 0 500 750" fill="none">
+  <rect width="500" height="750" fill="#111111"/>
+  <path d="M225 350 L225 400 L275 375 Z" fill="#333333"/>
+  <circle cx="250" cy="375" r="60" stroke="#333333" stroke-width="2" fill="none"/>
+  <text x="250" y="450" text-anchor="middle" fill="#333333" font-family="sans-serif" font-size="14" font-weight="bold">SIN IMAGEN</text>
+</svg>
