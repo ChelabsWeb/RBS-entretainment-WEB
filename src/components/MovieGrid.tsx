@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Plus, Loader2, Star, Calendar, ChevronRight } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
-import { fetchNowPlayingMovies, getImageUrl, Movie, searchMovie } from "@/lib/tmdb";
+import { fetchNowPlayingMovies, fetchUpcomingMovies, getImageUrl, Movie, searchMovie } from "@/lib/movies";
 import { MovieDetailModal } from "./MovieDetailModal";
 import Link from "next/link";
 import Image from "next/image";
@@ -76,16 +76,16 @@ function MovieCard({
         <div className="space-y-2">
           <div className="flex items-center gap-4">
              <span className="text-[10px] font-black tracking-[0.4em] uppercase text-theme-primary transition-colors">
-                #0{index + 1}
+                #{(index + 1).toString().padStart(2, '0')}
              </span>
              <div className="h-[1px] w-8 bg-white/10" />
              <div className="flex items-center gap-2 text-xs font-bold text-white/40">
                 <Calendar className="h-3 w-3" />
-                {movie.release_date.split("-")[0]}
+                {movie.release_date}
              </div>
           </div>
           <h3 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase leading-none group-hover:text-theme-primary transition-colors">
-            {movie.original_title}
+            {movie.title}
           </h3>
         </div>
 
@@ -114,29 +114,54 @@ function MovieCard({
   );
 }
 
-export function MovieGrid({ predefinedTitles }: { predefinedTitles?: string[] }) {
-  const [movies, setMovies] = useState<Movie[]>([]);
+export function MovieGrid({ enCartelTitles, proximamenteTitles }: { enCartelTitles?: string[]; proximamenteTitles?: string[] }) {
+  const [nowPlaying, setNowPlaying] = useState<Movie[]>([]);
+  const [upcoming, setUpcoming] = useState<Movie[]>([]);
+  const [activeTab, setActiveTab] = useState<"en_cartel" | "proximamente">("en_cartel");
+  const [visibleLimit, setVisibleLimit] = useState(6);
   const [loading, setLoading] = useState(true);
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [selectedThemeColor, setSelectedThemeColor] = useState<string | undefined>(undefined);
+  const [selectedMovieIndex, setSelectedMovieIndex] = useState<number | null>(null);
+
+  // Cada vez que cambiamos de pestaña, devolvemos el límite a 6
+  useEffect(() => {
+    setVisibleLimit(6);
+  }, [activeTab]);
 
   useEffect(() => {
     async function loadMovies() {
       try {
-        let curated: Movie[] = [];
-        
-        if (predefinedTitles && predefinedTitles.length > 0) {
-          curated = await Promise.all(
-            predefinedTitles.map(async (title) => {
-              const results = await searchMovie(title);
-              return results?.[0];
+        let curatedNowPlaying: Movie[] = [];
+        let curatedUpcoming: Movie[] = [];
+
+        if (enCartelTitles && enCartelTitles.length > 0) {
+          const results = await Promise.all(
+            enCartelTitles.map(async (title) => {
+              const res = await searchMovie(title);
+              return res?.[0];
             })
           ).then(res => res.filter(Boolean) as Movie[]);
+          curatedNowPlaying = results;
         } else {
-          curated = await fetchNowPlayingMovies();
+          curatedNowPlaying = await fetchNowPlayingMovies();
         }
 
-        setMovies(curated.slice(0, 3)); // strictly limit to 3 as requested
+        if (proximamenteTitles && proximamenteTitles.length > 0) {
+          const results = await Promise.all(
+            proximamenteTitles.map(async (title) => {
+              const res = await searchMovie(title);
+              return res?.[0];
+            })
+          ).then(res => res.filter(Boolean) as Movie[]);
+          curatedUpcoming = results;
+        } else {
+          curatedUpcoming = await fetchUpcomingMovies();
+        }
+
+        // Ordenar cronológicamente
+        const sortByDate = (a: Movie, b: Movie) => new Date(b.release_date).getTime() - new Date(a.release_date).getTime();
+
+        setNowPlaying(curatedNowPlaying.sort(sortByDate));
+        setUpcoming(curatedUpcoming.sort(sortByDate));
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       } finally {
@@ -144,7 +169,7 @@ export function MovieGrid({ predefinedTitles }: { predefinedTitles?: string[] })
       }
     }
     loadMovies();
-  }, [predefinedTitles]);
+  }, [enCartelTitles, proximamenteTitles]);
 
   if (loading) {
     return (
@@ -154,65 +179,109 @@ export function MovieGrid({ predefinedTitles }: { predefinedTitles?: string[] })
     );
   }
 
+  const displayedMovies = activeTab === "en_cartel" ? nowPlaying : upcoming;
+
   return (
     <section id="movies" className="bg-black py-32 px-6 md:px-12 border-t border-white/5">
       <div className="mb-24 flex flex-col gap-12 border-b border-white/10 pb-12">
-        <div className="w-full text-left">
+        <div className="w-full flex flex-col md:flex-row md:items-center justify-between gap-6">
           <h2 className="text-sm font-bold tracking-[0.6em] uppercase text-white/40">
             CATÁLOGO 2026
           </h2>
+          
+          {/* Custom Tabs Toggle */}
+          <div className="inline-flex items-center self-start md:self-auto rounded-full border border-white/10 p-1 bg-white/5">
+            <button
+              onClick={() => setActiveTab("en_cartel")}
+              className={`px-6 py-2.5 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-300 ${
+                activeTab === "en_cartel" 
+                  ? "bg-theme-primary text-white shadow-lg" 
+                  : "text-white/40 hover:text-white"
+              }`}
+            >
+              En Cartel
+            </button>
+            <button
+              onClick={() => setActiveTab("proximamente")}
+              className={`px-6 py-2.5 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-300 ${
+                activeTab === "proximamente" 
+                  ? "bg-theme-primary text-white shadow-lg" 
+                  : "text-white/40 hover:text-white"
+              }`}
+            >
+              Próximamente
+            </button>
+          </div>
         </div>
         
         <div className="flex flex-col items-center justify-center space-y-8 text-center w-full">
           <p className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-[0.8]">
-            ESTRENOS <br />
-            <span className="font-light text-theme-primary transition-colors duration-1000">RECOMENDADOS</span>
+            <span className="font-light text-white/50">{activeTab === "en_cartel" ? "CARTELERA" : "FUTUROS"}</span> <br />
+            <span className="text-theme-primary transition-colors duration-1000">
+              {activeTab === "en_cartel" ? "ACTUAL" : "ESTRENOS"}
+            </span>
           </p>
           
           <div className="space-y-4 flex flex-col items-center">
              <p className="text-xs font-bold tracking-[0.2em] uppercase text-white/20 max-w-md">
-                EXPLORA NUESTRA SELECCIÓN CURADA DE LOS MEJORES ESTRENOS EN CARTEL.
+                EXPLORA NUESTRO CATÁLOGO ORDENADO POR FECHA DE LANZAMIENTO.
              </p>
-             <Link href="/peliculas" className="inline-block text-xs font-black tracking-[0.3em] uppercase text-theme-primary border-b-2 border-theme-primary/20 pb-1 hover:border-theme-primary transition-colors">
-              VER TODAS LAS PELÍCULAS
-            </Link>
           </div>
         </div>
       </div>
 
       <div className="flex flex-col gap-12">
-        {movies.map((movie, index) => (
-          <MovieCard 
-            key={movie.id} 
-            movie={movie} 
-            index={index} 
-            isModalOpen={!!selectedMovie}
-            onClick={() => {
-              setSelectedMovie(movie);
-              setSelectedThemeColor(THEME_COLORS[index % THEME_COLORS.length]);
-            }}
+        {displayedMovies.length > 0 ? displayedMovies.slice(0, visibleLimit).map((movie, index) => (
+          <MovieCard
+            key={`${movie.id}-${activeTab}`}
+            movie={movie}
+            index={index}
+            isModalOpen={selectedMovieIndex !== null}
+            onClick={() => setSelectedMovieIndex(index)}
           />
-        ))}
+        )) : (
+          <div className="text-center py-20 opacity-50 text-white font-bold tracking-widest uppercase text-sm">
+            NO HAY PELÍCULAS PARA MOSTRAR EN ESTA SECCIÓN
+          </div>
+        )}
       </div>
 
-      {/* View All Movies Button */}
-      <div className="mt-24 flex justify-center">
-        <Link 
-          href="/peliculas"
-          className="group relative inline-flex items-center justify-center px-8 md:px-12 py-5 md:py-6 rounded-full overflow-hidden border border-white/10 transition-all hover:border-theme-primary text-center"
-        >
-            <span className="relative z-10 text-xs font-black tracking-[0.2em] md:tracking-[0.4em] uppercase text-white group-hover:text-black transition-colors whitespace-nowrap">
-              VER TODOS LOS ESTRENOS
-            </span>
-            <div className="absolute inset-0 -z-0 bg-theme-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo" />
-        </Link>
-      </div>
+      {/* Load More or View All Movies Button */}
+      {displayedMovies.length > 6 && (
+        <div className="mt-24 flex justify-center">
+          {visibleLimit < displayedMovies.length ? (
+            <button
+              onClick={() => setVisibleLimit(prev => prev + 6)}
+              className="group relative inline-flex items-center justify-center px-8 md:px-12 py-5 md:py-6 rounded-full overflow-hidden border border-white/10 transition-all hover:border-theme-primary text-center"
+            >
+                <span className="relative z-10 text-xs font-black tracking-[0.2em] md:tracking-[0.4em] uppercase text-white group-hover:text-black transition-colors whitespace-nowrap">
+                  VER MÁS PELÍCULAS
+                </span>
+                <div className="absolute inset-0 -z-0 bg-theme-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo" />
+            </button>
+          ) : (
+            <Link
+              href="/peliculas"
+              className="group relative inline-flex items-center justify-center px-8 md:px-12 py-5 md:py-6 rounded-full overflow-hidden border border-white/10 transition-all hover:border-theme-primary text-center"
+            >
+                <span className="relative z-10 text-xs font-black tracking-[0.2em] md:tracking-[0.4em] uppercase text-white group-hover:text-black transition-colors whitespace-nowrap">
+                  VER CATÁLOGO COMPLETO
+                </span>
+                <div className="absolute inset-0 -z-0 bg-theme-primary translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-expo" />
+            </Link>
+          )}
+        </div>
+      )}
 
-      <MovieDetailModal 
-        movie={selectedMovie}
-        isOpen={!!selectedMovie}
-        onClose={() => setSelectedMovie(null)}
+      <MovieDetailModal
+        movie={selectedMovieIndex !== null ? displayedMovies[selectedMovieIndex] : null}
+        isOpen={selectedMovieIndex !== null}
+        onClose={() => setSelectedMovieIndex(null)}
+        movies={displayedMovies}
+        currentIndex={selectedMovieIndex ?? 0}
+        onNavigate={(_, idx) => setSelectedMovieIndex(idx)}
       />
     </section>
   );
 }
+

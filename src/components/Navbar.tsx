@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Menu, Search, X, Loader2 } from "lucide-react";
+import { Menu, Search, X, Loader2, LogIn, LogOut, LayoutDashboard } from "lucide-react";
 import clsx from "clsx";
 import { useTheme } from "@/context/ThemeContext";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Movie, searchMovie, searchLicensedMovies, getImageUrl } from "@/lib/tmdb";
+import { Movie, searchMovie, searchLicensedMovies, getImageUrl } from "@/lib/movies";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,6 +19,7 @@ export function Navbar() {
   const { theme } = useTheme();
   const router = useRouter();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const { user, loading, signOut } = useAuth();
 
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
@@ -55,10 +57,7 @@ export function Navbar() {
     }
   };
 
-  const isDarkText = theme.text === "#000000";
-  const logoSrc = isDarkText 
-    ? "/assets/Logos/RBS logo negro.png" 
-    : "/assets/Logos/RBS logo blanco footer.png";
+  const logoSrc = "/assets/Logos/RBS logo blanco footer.png";
 
   return (
     <header className="fixed top-8 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
@@ -68,7 +67,7 @@ export function Navbar() {
           style={{ backgroundColor: theme.primary }}
         />
 
-        <div className="flex h-12 w-full items-center justify-between px-4 relative" style={{ color: theme.text }}>
+        <div className="flex h-12 w-full items-center justify-between px-4 relative text-white">
           {/* Menu Button - Hidden when search is open */}
           <div className={clsx(
             "flex items-center transition-all duration-300 z-10",
@@ -85,14 +84,11 @@ export function Navbar() {
             isSearchOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
           )}>
             <Link href="/" className="relative h-8 md:h-10 w-32 md:w-48 cursor-pointer flex items-center justify-center">
-              <Image 
-                src={logoSrc} 
-                alt="RBS Entertainment" 
-                fill 
-                className={clsx(
-                  "object-contain",
-                  isDarkText ? "scale-140 translate-y-[2px]" : "scale-100"
-                )}
+              <Image
+                src={logoSrc}
+                alt="RBS Entertainment"
+                fill
+                className="object-contain scale-100"
                 priority
               />
             </Link>
@@ -162,9 +158,9 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Search/Close Button */}
-          <div className="flex items-center z-30">
-            <button 
+          {/* Right actions: Search/Close + Login */}
+          <div className="flex items-center gap-1 z-30">
+            <button
               onClick={() => {
                 if (isSearchOpen) {
                   setIsSearchOpen(false);
@@ -174,10 +170,26 @@ export function Navbar() {
                   setIsSearchOpen(true);
                 }
               }}
-              className="p-2 hover:opacity-70 transition-opacity"
+              className="p-2 hover:opacity-70 transition-opacity text-white"
             >
               {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
             </button>
+            {!isSearchOpen && !loading && (
+              user ? (
+                <div className="flex items-center gap-1">
+                  <Link href="/dashboard" className="p-2 hover:opacity-70 transition-opacity text-white" title="Panel de control">
+                    <LayoutDashboard className="h-5 w-5" />
+                  </Link>
+                  <button onClick={signOut} className="p-2 hover:opacity-70 transition-opacity text-white" title="Cerrar sesión">
+                    <LogOut className="h-5 w-5" />
+                  </button>
+                </div>
+              ) : (
+                <Link href="/login" className="p-2 hover:opacity-70 transition-opacity text-white">
+                  <LogIn className="h-5 w-5" />
+                </Link>
+              )
+            )}
           </div>
         </div>
       </nav>
@@ -197,7 +209,6 @@ export function Navbar() {
             </button>
             {[
               { name: "INICIO", href: "/" },
-              { name: "PELÍCULAS", href: "/peliculas" },
               { name: "LICENCIAS", href: "/licensing" },
               { name: "QUIÉNES SOMOS", href: "/about" },
               { name: "CONTACTO", href: "/#contacto" }
