@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { LoginForm } from "./LoginForm";
+
+export const metadata: Metadata = {
+  title: "Iniciar Sesión",
+};
 
 export default async function LoginPage({
   searchParams,

@@ -4,10 +4,44 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 
 export const metadata: Metadata = {
-  title: "RBS Entertainment",
-  description: "RBS Entertainment - Experience the best in entertainment.",
-  icons: {
-    icon: "/icon.png",
+  title: {
+    template: "%s | RBS Entertainment",
+    default: "RBS Entertainment",
+  },
+  description:
+    "RBS Entertainment es agencia especializada en distribución y licenciamiento cinematográfico en Uruguay. Representantes de Disney, Universal Studios y Paramount Pictures.",
+  keywords: [
+    "RBS Entertainment",
+    "RBS Cinema",
+    "cine Uruguay",
+    "distribución cinematográfica",
+    "películas",
+    "estrenos",
+    "Disney",
+    "Universal Studios",
+    "Paramount Pictures",
+    "licencias cinematográficas",
+  ],
+  authors: [{ name: "RBS Entertainment" }],
+  creator: "RBS Entertainment",
+  metadataBase: new URL("https://rbsentertainment.com.uy"),
+  openGraph: {
+    type: "website",
+    locale: "es_UY",
+    siteName: "RBS Entertainment",
+    title: "RBS Entertainment",
+    description:
+      "Agencia especializada en distribución y licenciamiento cinematográfico en Uruguay. Representantes de Disney, Universal Studios y Paramount Pictures.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RBS Entertainment",
+    description:
+      "Agencia especializada en distribución y licenciamiento cinematográfico en Uruguay.",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

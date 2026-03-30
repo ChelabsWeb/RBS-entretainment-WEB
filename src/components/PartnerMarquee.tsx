@@ -27,10 +27,13 @@ export function PartnerMarquee() {
   useEffect(() => {
     if (!marqueeRef.current) return;
 
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
     const marquee = marqueeRef.current;
     const content = marquee.firstChild as HTMLElement;
     const contentWidth = content.offsetWidth;
-    
+
     // Create infinite animation
     gsap.to(content, {
       x: `-${contentWidth / 2}px`,
