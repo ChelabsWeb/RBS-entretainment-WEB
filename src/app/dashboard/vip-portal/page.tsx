@@ -93,7 +93,7 @@ async function MovieFeed() {
           title={key === "__otros__" ? "Otros" : (DISTRIBUTOR_LABELS[key] || key)}
           movies={groupMovies}
           count={groupMovies.length}
-          basePath="/vip/movies"
+          basePath="/dashboard/vip-portal"
         />
       ))}
     </div>
