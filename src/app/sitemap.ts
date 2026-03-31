@@ -49,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { data: movies } = await supabase
       .from('movies')
       .select('id, updated_at')
-      .in('estado_publicacion', ['vip', 'publicado'])
+      .eq('estado_publicacion', 'publicado')
 
     if (movies) {
       movieRoutes = movies.map((movie) => ({

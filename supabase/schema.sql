@@ -223,9 +223,26 @@ ALTER TABLE user_roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE audit_log ENABLE ROW LEVEL SECURITY;
 ALTER TABLE login_attempts ENABLE ROW LEVEL SECURITY;
 
--- Movies: read by any authenticated, write by admin/super_admin
-CREATE POLICY "Movies readable by authenticated" ON movies
-  FOR SELECT TO authenticated USING (TRUE);
+-- Movies: admins see all, authenticated non-admins see vip+publicado
+CREATE POLICY "Movies readable by admins" ON movies
+  FOR SELECT TO authenticated
+  USING (
+    EXISTS (
+      SELECT 1 FROM user_roles
+      WHERE user_roles.user_id = auth.uid()
+      AND user_roles.role IN ('super_admin', 'admin')
+    )
+  );
+
+CREATE POLICY "Movies readable by vip users" ON movies
+  FOR SELECT TO authenticated
+  USING (
+    estado_publicacion IN ('vip', 'publicado')
+    AND NOT EXISTS (
+      SELECT 1 FROM user_roles
+      WHERE user_roles.user_id = auth.uid()
+    )
+  );
 
 CREATE POLICY "Movies writable by admins" ON movies
   FOR ALL TO authenticated
@@ -249,9 +266,16 @@ CREATE POLICY "Published movies readable by public" ON movies
   FOR SELECT TO anon
   USING (estado_publicacion = 'publicado');
 
--- Movie Documents: read/write by admin/super_admin
-CREATE POLICY "Documents readable by authenticated" ON movie_documents
-  FOR SELECT TO authenticated USING (TRUE);
+-- Movie Documents: only admins can read and write
+CREATE POLICY "Documents readable by admins" ON movie_documents
+  FOR SELECT TO authenticated
+  USING (
+    EXISTS (
+      SELECT 1 FROM user_roles
+      WHERE user_roles.user_id = auth.uid()
+      AND user_roles.role IN ('super_admin', 'admin')
+    )
+  );
 
 CREATE POLICY "Documents writable by admins" ON movie_documents
   FOR ALL TO authenticated
