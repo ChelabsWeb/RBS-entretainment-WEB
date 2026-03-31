@@ -63,6 +63,7 @@ function MovieCard({
           alt={movie.title}
           fill
           sizes="(max-width: 768px) 60vw, 256px"
+          quality={100}
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
         <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-black/40 backdrop-blur-sm">

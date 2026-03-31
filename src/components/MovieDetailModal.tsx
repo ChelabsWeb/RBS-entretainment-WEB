@@ -165,6 +165,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                       alt={movie.title}
                       fill
                       sizes="(max-width: 1024px) 90vw, 560px"
+                      quality={100}
                       className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -226,6 +227,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                                  alt={person.name}
                                  fill
                                  sizes="96px"
+                                 quality={100}
                                  className="object-cover grayscale transition-all group-hover:grayscale-0"
                                />
                              ) : (

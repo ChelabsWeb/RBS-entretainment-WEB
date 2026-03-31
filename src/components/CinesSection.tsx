@@ -90,6 +90,7 @@ export function CinesSection() {
                   alt={`${cinema.name} logo`}
                   width={48}
                   height={48}
+                  quality={100}
                   className="object-contain"
                   onError={(e) => {
                     // Fallback to text if logo not found

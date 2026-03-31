@@ -517,6 +517,7 @@ export default function MovieForm({ movie, mode }: MovieFormProps) {
                     alt="Logo distribuidora"
                     width={100}
                     height={50}
+                    quality={100}
                     className="object-contain w-full h-full"
                   />
                 </div>
@@ -539,6 +540,7 @@ export default function MovieForm({ movie, mode }: MovieFormProps) {
                     alt="Vista previa del p&oacute;ster"
                     fill
                     sizes="128px"
+                    quality={100}
                     className="object-cover"
                   />
                 </div>
@@ -580,6 +582,7 @@ export default function MovieForm({ movie, mode }: MovieFormProps) {
                     alt="Vista previa del hero"
                     fill
                     sizes="192px"
+                    quality={100}
                     className="object-cover"
                   />
                 </div>

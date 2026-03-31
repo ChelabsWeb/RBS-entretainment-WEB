@@ -160,6 +160,7 @@ export function Hero({
               alt={currentMovie.title}
               fill
               sizes="100vw"
+              quality={100}
               className="object-cover opacity-60 scale-105"
               priority
               fetchPriority="high"
@@ -190,6 +191,7 @@ export function Hero({
                     alt="Logo distribuidor"
                     width={600}
                     height={240}
+                    quality={100}
                     className="object-contain opacity-[0.12] w-[60vw] max-w-xl md:max-w-2xl lg:max-w-3xl select-none pointer-events-none"
                     priority
                   />

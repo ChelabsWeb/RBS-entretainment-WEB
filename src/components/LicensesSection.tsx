@@ -87,6 +87,7 @@ const LicenseSection = ({ partner, themeColor }: { partner: any, themeColor: str
               alt={partner.name}
               fill
               sizes="(max-width: 768px) 192px, 224px"
+              quality={100}
               className="object-contain transition-all duration-500"
             />
           </div>
@@ -118,6 +119,7 @@ const LicenseSection = ({ partner, themeColor }: { partner: any, themeColor: str
                 alt={`${partner.name} image ${index}`}
                 fill
                 sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                quality={100}
                 className="object-cover transition-all duration-1000 scale-105 group-hover:scale-100"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

@@ -218,6 +218,7 @@ export default async function MovieDetailPage({
               fill
               className="object-cover"
               sizes="(max-width: 768px) 280px, 256px"
+              quality={100}
               priority
             />
           ) : (

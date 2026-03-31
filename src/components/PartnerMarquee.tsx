@@ -77,6 +77,7 @@ export function PartnerMarquee() {
                     alt={partner.name}
                     fill
                     sizes="(max-width: 768px) 128px, 192px"
+                    quality={100}
                     className="object-contain"
                   />
                 </div>
