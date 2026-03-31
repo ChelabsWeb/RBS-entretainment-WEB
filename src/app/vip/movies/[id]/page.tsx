@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -5,6 +6,39 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Calendar, Clock, Download, Film, FileText, Star, Tag } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
+
+function resolvePosterUrl(raw: string | null): string | null {
+  if (!raw) return null;
+  if (raw.startsWith("http")) return raw;
+  return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/movie-posters/${raw}`;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+  const { data: movie } = await supabase
+    .from("movies")
+    .select("titulo, sinopsis, poster_url")
+    .eq("id", id)
+    .single();
+
+  if (!movie) return { title: "Película no encontrada" };
+
+  const posterUrl = resolvePosterUrl(movie.poster_url);
+  const description = movie.sinopsis
+    ? movie.sinopsis.substring(0, 160) + (movie.sinopsis.length > 160 ? "..." : "")
+    : "Información de exhibición en RBS Entertainment";
+
+  return {
+    title: movie.titulo,
+    description,
+    openGraph: {
+      title: movie.titulo,
+      description,
+      ...(posterUrl && { images: [{ url: posterUrl, alt: movie.titulo }] }),
+    },
+  };
+}
 
 interface Movie {
   id: string;
