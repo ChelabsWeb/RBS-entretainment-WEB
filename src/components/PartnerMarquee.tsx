@@ -44,7 +44,7 @@ export function PartnerMarquee() {
   }, []);
 
   return (
-    <section className="py-24 overflow-hidden bg-black border-y border-white/5">
+    <section className="py-24 overflow-hidden bg-black border-y border-white/5 min-h-[280px] md:min-h-[380px]">
       <div className="max-w-7xl mx-auto px-6 mb-12 flex flex-col items-center justify-center text-center">
         <h2 className="text-sm font-black uppercase tracking-[0.5em] text-white/20 mb-4"> NUESTRAS LICENCIAS Y CINE </h2>
         <div className="h-[2px] w-24" style={{ backgroundColor: theme.primary }} />

@@ -4,6 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PartnerMarquee } from "@/components/PartnerMarquee";
 import { ContactSection } from "@/components/ContactSection";
+import { fetchNowPlayingMoviesServer, fetchUpcomingMoviesServer } from "@/lib/movies-server";
 
 const jsonLdOrganization = {
   "@context": "https://schema.org",
@@ -27,7 +28,14 @@ const jsonLdWebSite = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  // Pre-fetch hero movies server-side so the LCP backdrop image renders on first paint
+  const [nowPlaying, upcoming] = await Promise.all([
+    fetchNowPlayingMoviesServer(),
+    fetchUpcomingMoviesServer(),
+  ]);
+  const heroMovies = [...nowPlaying.slice(0, 3), ...upcoming.slice(0, 3)].slice(0, 6);
+
   return (
     <main className="min-h-screen bg-black">
       <script
@@ -39,7 +47,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebSite) }}
       />
       <Navbar />
-      <Hero />
+      <Hero initialMovies={heroMovies} />
       <MovieGrid />
 
       <PartnerMarquee />

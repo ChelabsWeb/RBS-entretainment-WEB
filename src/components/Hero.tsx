@@ -8,14 +8,16 @@ import { fetchNowPlayingMovies, fetchUpcomingMovies, getImageUrl, Movie, searchM
 import { MovieDetailModal } from "./MovieDetailModal";
 import Image from "next/image";
 
-export function Hero({ 
-  predefinedTitles, 
+export function Hero({
+  initialMovies,
+  predefinedTitles,
   heroTitle = "ESTRENOS",
   isLeftAligned = false,
   showDetails = true,
   customHeading,
   headingClassName
-}: { 
+}: {
+  initialMovies?: Movie[];
   predefinedTitles?: string[];
   heroTitle?: string;
   isLeftAligned?: boolean;
@@ -23,17 +25,22 @@ export function Hero({
   customHeading?: React.ReactNode;
   headingClassName?: string;
 }) {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  // Use server-provided movies immediately to avoid client-fetch waterfall (LCP fix)
+  const hasInitialMovies = initialMovies && initialMovies.length > 0;
+  const [movies, setMovies] = useState<Movie[]>(hasInitialMovies ? initialMovies : []);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!hasInitialMovies);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const { setTheme } = useTheme();
 
   useEffect(() => {
+    // Skip client-side fetch when server already provided movies
+    if (hasInitialMovies) return;
+
     async function loadHeroMovies() {
       try {
         let curated: Movie[] = [];
-        
+
         if (predefinedTitles && predefinedTitles.length > 0) {
           curated = await fetchMoviesByTitle(predefinedTitles);
         } else {
@@ -62,7 +69,7 @@ export function Hero({
       return results.filter(Boolean) as Movie[];
     }
     loadHeroMovies();
-  }, []);
+  }, [hasInitialMovies]);
 
   useEffect(() => {
     if (movies.length > 0) {
@@ -129,7 +136,9 @@ export function Hero({
   }
 
   if (movies.length === 0) {
-    return null; // Don't render anything if no movies are found to prevent crashes
+    return (
+      <section className="relative h-[100vh] w-full bg-black" />
+    );
   }
 
   const currentMovie = movies[currentSlide];
@@ -153,6 +162,7 @@ export function Hero({
               sizes="100vw"
               className="object-cover opacity-60 scale-105"
               priority
+              fetchPriority="high"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
           </div>

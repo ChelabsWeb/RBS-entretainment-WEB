@@ -174,7 +174,7 @@ export function MovieGrid({ enCartelTitles, proximamenteTitles }: { enCartelTitl
 
   if (loading) {
     return (
-      <section id="movies" className="bg-black py-48 flex items-center justify-center">
+      <section id="movies" className="bg-black py-32 px-6 md:px-12 border-t border-white/5 min-h-[600px] flex items-center justify-center">
         <Loader2 className="h-12 w-12 text-white animate-spin opacity-20" />
       </section>
     );

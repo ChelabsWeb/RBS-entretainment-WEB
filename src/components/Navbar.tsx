@@ -83,13 +83,13 @@ export function Navbar() {
             "flex-1 flex items-center justify-center gap-6 transition-all duration-300 z-10",
             isSearchOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
           )}>
-            <Link href="/" className="relative h-8 md:h-10 w-32 md:w-40 cursor-pointer flex items-center justify-center flex-shrink-0">
+            <Link href="/" className="relative block h-8 md:h-10 w-32 md:w-40 cursor-pointer flex-shrink-0 overflow-hidden">
               <Image
                 src={logoSrc}
                 alt="RBS Entertainment"
                 fill
                 sizes="(max-width: 768px) 128px, 160px"
-                className="object-contain scale-100"
+                className="object-contain"
                 priority
               />
             </Link>
@@ -177,7 +177,7 @@ export function Navbar() {
           </div>
 
           {/* Right actions: Search/Close + Login */}
-          <div className="flex items-center gap-1 z-30">
+          <div className="flex items-center gap-1 z-30 min-w-[40px]">
             <button
               onClick={() => {
                 if (isSearchOpen) {
@@ -193,8 +193,10 @@ export function Navbar() {
             >
               {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
             </button>
-            {!isSearchOpen && !loading && (
-              user ? (
+            {!isSearchOpen && (
+              loading ? (
+                <div className="w-9 h-9" aria-hidden="true" />
+              ) : user ? (
                 <div className="flex items-center gap-1">
                   <Link href="/dashboard" className="p-2 hover:opacity-70 transition-opacity text-white" title="Panel de control">
                     <LayoutDashboard className="h-5 w-5" />
