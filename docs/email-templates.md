@@ -24,7 +24,7 @@ Ve a **Supabase Dashboard → Authentication → Email Templates** y pega estos 
           <!-- Header -->
           <tr>
             <td style="padding:32px 32px 24px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);">
-              <img src="https://rbsentertainment.com.uy/assets/Logos/RBS%20logo%20color.png" alt="RBS Entertainment" width="140" style="display:block;margin:0 auto;">
+              <img src="https://ibsffdlzvbeiolyfpyoy.supabase.co/storage/v1/object/public/movie-posters/brand/rbs-logo-color.png" alt="RBS Entertainment" width="140" style="display:block;margin:0 auto;">
             </td>
           </tr>
 
@@ -86,7 +86,7 @@ Ve a **Supabase Dashboard → Authentication → Email Templates** y pega estos 
 
           <tr>
             <td style="padding:32px 32px 24px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);">
-              <img src="https://rbsentertainment.com.uy/assets/Logos/RBS%20logo%20color.png" alt="RBS Entertainment" width="140" style="display:block;margin:0 auto;">
+              <img src="https://ibsffdlzvbeiolyfpyoy.supabase.co/storage/v1/object/public/movie-posters/brand/rbs-logo-color.png" alt="RBS Entertainment" width="140" style="display:block;margin:0 auto;">
             </td>
           </tr>
 
@@ -142,7 +142,7 @@ Ve a **Supabase Dashboard → Authentication → Email Templates** y pega estos 
 
           <tr>
             <td style="padding:32px 32px 24px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06);">
-              <img src="https://rbsentertainment.com.uy/assets/Logos/RBS%20logo%20color.png" alt="RBS Entertainment" width="140" style="display:block;margin:0 auto;">
+              <img src="https://ibsffdlzvbeiolyfpyoy.supabase.co/storage/v1/object/public/movie-posters/brand/rbs-logo-color.png" alt="RBS Entertainment" width="140" style="display:block;margin:0 auto;">
             </td>
           </tr>
 
