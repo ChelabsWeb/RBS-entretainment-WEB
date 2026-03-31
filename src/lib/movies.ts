@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/client";
 
 // Distributor → local logo path mapping
 export const DISTRIBUTOR_LOGOS: Record<string, string> = {
-  disney: "/assets/Logos/disney-logo.svg",
+  disney: "/assets/licencias/disney/disney logo.png",
   dreamworks: "/assets/Logos/dreamworks-animation-logo-black-and-white.png",
   illumination: "/assets/Logos/illumination logo.png",
   patagonik: "/assets/Logos/Patagonik_Film_Group_Logo.webp",
