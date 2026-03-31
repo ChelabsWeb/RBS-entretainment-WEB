@@ -68,7 +68,7 @@ export function Navbar() {
         />
 
         <div className="flex h-12 w-full items-center justify-between px-4 relative text-white">
-          {/* Menu Button - Hidden when search is open */}
+          {/* Menu Button - Left side */}
           <div className={clsx(
             "flex items-center transition-all duration-300 z-10",
             isSearchOpen ? "w-0 opacity-0 pointer-events-none" : "w-10 opacity-100"
@@ -77,23 +77,24 @@ export function Navbar() {
               <Menu className="h-6 w-6" />
             </button>
           </div>
-          
-          {/* Logo + Nav Links - Hidden when search is open */}
-          <div className={clsx(
-            "flex-1 flex items-center justify-center gap-6 transition-all duration-300 z-10",
-            isSearchOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
-          )}>
-            <Link href="/" className="relative block h-8 md:h-10 w-32 md:w-48 cursor-pointer flex-shrink-0 overflow-hidden">
-              <Image
-                src={logoSrc}
-                alt="RBS Entertainment"
-                fill
-                sizes="(max-width: 768px) 128px, 192px"
-                className="object-contain"
-                priority
-              />
-            </Link>
-          </div>
+
+          {/* Logo - Always centered */}
+          <Link
+            href="/"
+            className={clsx(
+              "absolute left-1/2 -translate-x-1/2 z-10 block h-8 md:h-10 w-32 md:w-48 cursor-pointer flex-shrink-0 overflow-hidden transition-all duration-300",
+              isSearchOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
+            )}
+          >
+            <Image
+              src={logoSrc}
+              alt="RBS Entertainment"
+              fill
+              sizes="(max-width: 768px) 128px, 192px"
+              className="object-contain"
+              priority
+            />
+          </Link>
           
           {/* Search Container - Centered when open */}
           <div className={clsx(
