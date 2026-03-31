@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Film, Users, Shield, ClipboardList, LogOut, Menu, X, Loader2,
-  Eye, LayoutDashboard, ChevronRight,
+  Eye, LayoutDashboard, ChevronRight, ExternalLink,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRole } from "@/hooks/useRole";
@@ -130,6 +130,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             ))}
           </>
         )}
+        {/* Landing link */}
+        <div className="pt-4 pb-2">
+          <p className="px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/25">
+            Sitio
+          </p>
+        </div>
+        <Link
+          href="/"
+          target="_blank"
+          onClick={() => setSidebarOpen(false)}
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium text-white/50 hover:bg-white/[0.04] hover:text-white/80 transition-all"
+        >
+          <ExternalLink className="h-4 w-4 text-white/40" />
+          <span className="flex-1">Ver Sitio Web</span>
+        </Link>
       </nav>
 
       {/* User section */}
@@ -203,10 +218,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             >
               <Menu className="h-5 w-5" />
             </Button>
-            <div className="hidden lg:flex items-center gap-2 text-[12px] text-white/30">
-              <LayoutDashboard className="h-3.5 w-3.5" />
-              <span className="font-medium">Panel de Control</span>
-            </div>
+            {pathname !== "/dashboard" ? (
+              <Link
+                href="/dashboard"
+                className="hidden lg:flex items-center gap-2 text-[12px] text-white/40 hover:text-white transition-colors"
+              >
+                <LayoutDashboard className="h-3.5 w-3.5" />
+                <span className="font-medium">← Dashboard</span>
+              </Link>
+            ) : (
+              <div className="hidden lg:flex items-center gap-2 text-[12px] text-white/30">
+                <LayoutDashboard className="h-3.5 w-3.5" />
+                <span className="font-medium">Panel de Control</span>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-3">
@@ -214,15 +239,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Badge className="bg-[#4f5ea7]/15 text-[#4f5ea7] border-0 text-[10px] font-semibold uppercase tracking-wider">
               {roleLabel}
             </Badge>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleSignOut}
-              className="h-8 w-8 text-white/40 hover:text-white/70 hover:bg-white/5"
-              title="Cerrar sesion"
-            >
-              <LogOut className="h-4 w-4" />
-            </Button>
           </div>
         </header>
 
