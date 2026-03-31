@@ -1,6 +1,6 @@
 "use client";
 
-import { Facebook, Mail, Instagram, MapPin, Phone } from "lucide-react";
+import { Facebook, Mail, Instagram, MapPin, Phone, Twitter, Youtube } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import Link from "next/link";
 import Image from "next/image";
@@ -46,9 +46,18 @@ export function Footer() {
           <div className="mt-12">
              <h3 className="text-xs font-black tracking-[0.3em] uppercase text-white/20 mb-6">SEGUINOS</h3>
              <div className="flex gap-6">
-               <Facebook className="h-6 w-6 cursor-pointer text-white/20 transition-all hover:scale-110 hover:text-white" />
-               <Instagram className="h-6 w-6 cursor-pointer text-white/20 transition-all hover:scale-110 hover:text-white" />
-               <Mail className="h-6 w-6 cursor-pointer text-white/20 transition-all hover:scale-110 hover:text-white" />
+               <a href="https://www.facebook.com/CINELOVERS" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                 <Facebook className="h-6 w-6 cursor-pointer text-white/20 transition-all hover:scale-110 hover:text-white" />
+               </a>
+               <a href="https://www.instagram.com/cinelovers_uy/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                 <Instagram className="h-6 w-6 cursor-pointer text-white/20 transition-all hover:scale-110 hover:text-white" />
+               </a>
+               <a href="https://twitter.com/CINELOVERS_UY" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+                 <Twitter className="h-6 w-6 cursor-pointer text-white/20 transition-all hover:scale-110 hover:text-white" />
+               </a>
+               <a href="https://www.youtube.com/channel/UCQsZLbwhsg2pK_73yI_VjRA" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                 <Youtube className="h-6 w-6 cursor-pointer text-white/20 transition-all hover:scale-110 hover:text-white" />
+               </a>
              </div>
           </div>
         </div>

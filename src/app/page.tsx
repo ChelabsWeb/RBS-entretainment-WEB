@@ -14,6 +14,12 @@ const jsonLdOrganization = {
   logo: "https://rbsentertainment.com.uy/assets/Logos/RBS logo color.png",
   description: "Distribuidora y licenciataria de contenido cinematográfico en Uruguay. Representantes de Disney, Universal Studios y Paramount Pictures.",
   address: { "@type": "PostalAddress", addressCountry: "UY" },
+  sameAs: [
+    "https://www.facebook.com/CINELOVERS",
+    "https://www.instagram.com/cinelovers_uy/",
+    "https://twitter.com/CINELOVERS_UY",
+    "https://www.youtube.com/channel/UCQsZLbwhsg2pK_73yI_VjRA",
+  ],
 };
 
 const jsonLdWebSite = {
