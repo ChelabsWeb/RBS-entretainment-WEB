@@ -47,6 +47,62 @@ const CINEMA_EXHIBITORS = [
   { name: "Cines del Este", short: "ESTE", color: "#2ba137", linkKey: "link_cines_del_este", logo: "/assets/Logos/cines-del-este-logo.jpg" },
 ];
 
+function CastWithPhotos({ elenco, director }: { elenco: string; director: string | null }) {
+  const [people, setPeople] = useState<{ name: string; photo: string | null }[]>([]);
+
+  useEffect(() => {
+    const names = elenco.split(",").map(n => n.trim()).filter(Boolean);
+    if (director) names.unshift(director);
+
+    fetch("/api/tmdb/people-photos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ names }),
+    })
+      .then(res => res.json())
+      .then(data => setPeople(data))
+      .catch(() => {});
+  }, [elenco, director]);
+
+  if (people.length === 0) return null;
+
+  return (
+    <div className="space-y-4">
+      <h4 className="flex items-center gap-4 text-[9px] font-black tracking-[0.4em] uppercase text-white/40">
+        <Users className="h-4 w-4 text-theme-primary" />
+        ELENCO
+      </h4>
+      <div className="grid grid-cols-2 gap-4">
+        {people.map((person, i) => (
+          <div key={i} className="group flex items-center gap-3">
+            <div className="relative h-12 w-12 overflow-hidden rounded-full border border-white/10 flex-shrink-0">
+              {person.photo ? (
+                <Image
+                  src={person.photo}
+                  alt={person.name}
+                  fill
+                  sizes="48px"
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-white/5 text-[10px] font-black text-white/20">
+                  {person.name.charAt(0)}
+                </div>
+              )}
+            </div>
+            <div>
+              <p className="text-[11px] font-bold text-white/70">{person.name}</p>
+              {i === 0 && director && person.name === director && (
+                <p className="text-[8px] text-[#4f5ea7] uppercase tracking-wider font-bold">Director</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, currentIndex = 0, onNavigate }: MovieDetailModalProps) {
   const [details, setDetails] = useState<TMDBMovieDetails | null>(null);
   const [loading, setLoading] = useState(false);
@@ -243,29 +299,12 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                 </div>
               )}
 
-              {/* Supabase cast (when no TMDB cast available) */}
+              {/* Supabase cast with photos */}
               {!details?.credits?.cast && movie._supabase?.elenco && (
-                <div className="space-y-4">
-                  <h4 className="flex items-center gap-4 text-[9px] font-black tracking-[0.4em] uppercase text-white/40">
-                    <Users className="h-4 w-4 text-theme-primary" />
-                    ELENCO
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {movie._supabase.elenco.split(",").map((name, i) => (
-                      <span
-                        key={i}
-                        className="text-[10px] font-bold tracking-wide text-white/60 border border-white/10 rounded-full px-3 py-1"
-                      >
-                        {name.trim()}
-                      </span>
-                    ))}
-                  </div>
-                  {movie._supabase.director && (
-                    <p className="text-[10px] text-white/40">
-                      <span className="font-bold text-white/50">Dir.</span> {movie._supabase.director}
-                    </p>
-                  )}
-                </div>
+                <CastWithPhotos
+                  elenco={movie._supabase.elenco}
+                  director={movie._supabase?.director ?? null}
+                />
               )}
 
               {/* Distribution & Cinemas */}

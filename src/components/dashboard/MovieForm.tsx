@@ -22,6 +22,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { DISTRIBUTOR_LOGOS, DISTRIBUTOR_LABELS } from "@/lib/movies";
+import { PersonSearchInput } from "@/components/dashboard/PersonSearchInput";
 
 interface MovieFormProps {
   movie?: Record<string, unknown>;
@@ -187,17 +188,13 @@ export default function MovieForm({ movie, mode }: MovieFormProps) {
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="director" className={labelClass}>
-                  Director
-                </Label>
-                <Input
-                  id="director"
-                  {...form.register("director")}
-                  className={inputClass}
-                  placeholder="Nombre del director"
-                />
-              </div>
+              <PersonSearchInput
+                label="Director"
+                value={form.watch("director") ?? ""}
+                onChange={(val) => form.setValue("director", val)}
+                mode="single"
+                placeholder="Buscar director..."
+              />
             </div>
 
             <div className="space-y-2">
@@ -212,17 +209,13 @@ export default function MovieForm({ movie, mode }: MovieFormProps) {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="elenco" className={labelClass}>
-                Elenco
-              </Label>
-              <Textarea
-                id="elenco"
-                {...form.register("elenco")}
-                className={`${inputClass} min-h-[80px]`}
-                placeholder="Nombre Actor 1, Nombre Actor 2, ..."
-              />
-            </div>
+            <PersonSearchInput
+              label="Elenco"
+              value={form.watch("elenco") ?? ""}
+              onChange={(val) => form.setValue("elenco", val)}
+              mode="multi"
+              placeholder="Buscar actores..."
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
