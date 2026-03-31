@@ -367,7 +367,7 @@ export default async function MovieDetailPage({
                 </span>
                 {i === 0 && typedMovie.director && person.name === typedMovie.director && (
                   <span className="text-[8px] text-[#4f5ea7] uppercase tracking-wider font-bold -mt-1">
-                    Director
+                    {person.gender === 1 ? "Directora" : "Director"}
                   </span>
                 )}
               </div>

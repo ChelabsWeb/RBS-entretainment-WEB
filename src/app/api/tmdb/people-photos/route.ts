@@ -28,9 +28,10 @@ export async function POST(request: NextRequest) {
           photo: person?.profile_path
             ? `https://image.tmdb.org/t/p/w185${person.profile_path}`
             : null,
+          gender: person?.gender ?? 0,
         };
       } catch {
-        return { name: trimmed, photo: null };
+        return { name: trimmed, photo: null, gender: 0 };
       }
     })
   );

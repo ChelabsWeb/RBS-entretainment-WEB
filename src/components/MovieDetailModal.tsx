@@ -48,7 +48,7 @@ const CINEMA_EXHIBITORS = [
 ];
 
 function CastWithPhotos({ elenco, director }: { elenco: string; director: string | null }) {
-  const [people, setPeople] = useState<{ name: string; photo: string | null }[]>([]);
+  const [people, setPeople] = useState<{ name: string; photo: string | null; gender?: number }[]>([]);
 
   useEffect(() => {
     const names = elenco.split(",").map(n => n.trim()).filter(Boolean);
@@ -93,7 +93,9 @@ function CastWithPhotos({ elenco, director }: { elenco: string; director: string
             <div>
               <p className="text-[11px] font-bold text-white/70">{person.name}</p>
               {i === 0 && director && person.name === director && (
-                <p className="text-[8px] text-[#4f5ea7] uppercase tracking-wider font-bold">Director</p>
+                <p className="text-[8px] text-[#4f5ea7] uppercase tracking-wider font-bold">
+                  {person.gender === 1 ? "Directora" : "Director"}
+                </p>
               )}
             </div>
           </div>

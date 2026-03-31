@@ -6,11 +6,13 @@ interface TMDBPerson {
   name: string;
   profile_path: string | null;
   known_for_department: string;
+  gender: number;
 }
 
 export interface PersonWithPhoto {
   name: string;
   photo_url: string | null;
+  gender: number;
 }
 
 async function searchPerson(name: string): Promise<TMDBPerson | null> {
@@ -42,6 +44,7 @@ export async function fetchPeoplePhotos(names: string[]): Promise<PersonWithPhot
         photo_url: person?.profile_path
           ? `https://image.tmdb.org/t/p/w185${person.profile_path}`
           : null,
+        gender: person?.gender ?? 0,
       };
     })
   );
