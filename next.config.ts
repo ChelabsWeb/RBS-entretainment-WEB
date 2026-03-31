@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
         hostname: "ibsffdlzvbeiolyfpyoy.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        protocol: "https",
+        hostname: "www.rbs.com.uy",
+        pathname: "/wp-content/uploads/**",
+      },
     ],
   },
 };
