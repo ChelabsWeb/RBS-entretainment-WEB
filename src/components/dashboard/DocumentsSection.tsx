@@ -68,6 +68,11 @@ export default function DocumentsSection({ movieId }: DocumentsSectionProps) {
     const file = fileInputRef.current?.files?.[0];
     if (!file) return;
 
+    if (file.size > 10 * 1024 * 1024) {
+      setError("El archivo no puede superar los 10 MB.");
+      return;
+    }
+
     setError(null);
     startTransition(async () => {
       try {
@@ -167,6 +172,7 @@ export default function DocumentsSection({ movieId }: DocumentsSectionProps) {
               {isPending ? "Subiendo..." : "Subir"}
             </Button>
           </div>
+          <p className="text-white/40 text-xs">M&aacute;ximo 10 MB</p>
         </div>
 
         <Separator className="bg-white/10" />

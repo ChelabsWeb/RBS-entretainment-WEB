@@ -62,6 +62,7 @@ export default function MovieForm({ movie, mode }: MovieFormProps) {
       genero: (movie?.genero as string) ?? "",
       anio: (movie?.anio as number) ?? undefined,
       director: (movie?.director as string) ?? "",
+      elenco: (movie?.elenco as string) ?? "",
       link_movie: (movie?.link_movie as string) ?? "",
       link_life_cinemas: (movie?.link_life_cinemas as string) ?? "",
       link_grupo_cine: (movie?.link_grupo_cine as string) ?? "",
@@ -208,6 +209,18 @@ export default function MovieForm({ movie, mode }: MovieFormProps) {
                 {...form.register("sinopsis")}
                 className={`${inputClass} min-h-[100px]`}
                 placeholder="Descripci&oacute;n de la pel&iacute;cula..."
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="elenco" className={labelClass}>
+                Elenco
+              </Label>
+              <Textarea
+                id="elenco"
+                {...form.register("elenco")}
+                className={`${inputClass} min-h-[80px]`}
+                placeholder="Nombre Actor 1, Nombre Actor 2, ..."
               />
             </div>
 

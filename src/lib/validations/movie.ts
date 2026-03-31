@@ -18,6 +18,7 @@ export const movieSchema = z.object({
   genero: z.string().optional(),
   anio: z.number().optional(),
   director: z.string().optional(),
+  elenco: z.string().optional(),
   link_movie: z.string().optional(),
   link_life_cinemas: z.string().optional(),
   link_grupo_cine: z.string().optional(),

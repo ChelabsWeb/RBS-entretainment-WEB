@@ -35,6 +35,7 @@ CREATE TABLE movies (
   genero TEXT,
   anio INTEGER,
   director TEXT,
+  elenco TEXT,
   distributor TEXT,
   trailer_url TEXT,
   hero_image_url TEXT,
