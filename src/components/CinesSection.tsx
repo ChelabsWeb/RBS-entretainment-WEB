@@ -126,14 +126,11 @@ export function CinesSection() {
                 ))}
               </div>
 
-              {/* CTA */}
-              <a
-                href={cinema.website}
-                className="inline-flex items-center gap-2 text-[10px] font-black tracking-[0.2em] uppercase text-white/20 hover:text-white transition-colors duration-300 group/link"
-              >
+              {/* CTA — disabled until real URLs are provided */}
+              <span className="inline-flex items-center gap-2 text-[10px] font-black tracking-[0.2em] uppercase text-white/20 cursor-default">
                 VER CARTELERA
-                <ExternalLink className="h-3 w-3 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-              </a>
+                <ExternalLink className="h-3 w-3" />
+              </span>
             </div>
           ))}
         </div>

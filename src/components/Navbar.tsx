@@ -78,21 +78,37 @@ export function Navbar() {
             </button>
           </div>
           
-          {/* Logo - Hidden when search is open */}
+          {/* Logo + Nav Links - Hidden when search is open */}
           <div className={clsx(
-            "flex-1 flex justify-center transition-all duration-300 z-10",
+            "flex-1 flex items-center justify-center gap-6 transition-all duration-300 z-10",
             isSearchOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"
           )}>
-            <Link href="/" className="relative h-8 md:h-10 w-32 md:w-48 cursor-pointer flex items-center justify-center">
+            <Link href="/" className="relative h-8 md:h-10 w-32 md:w-40 cursor-pointer flex items-center justify-center flex-shrink-0">
               <Image
                 src={logoSrc}
                 alt="RBS Entertainment"
                 fill
-                sizes="(max-width: 768px) 128px, 192px"
+                sizes="(max-width: 768px) 128px, 160px"
                 className="object-contain scale-100"
                 priority
               />
             </Link>
+            <nav className="hidden md:flex items-center gap-5">
+              {[
+                { name: "Películas", href: "/peliculas" },
+                { name: "Nosotros", href: "/about" },
+                { name: "Licencias", href: "/licensing" },
+                { name: "Contacto", href: "/contact" },
+              ].map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="text-[13px] font-medium text-white/60 hover:text-white transition-colors whitespace-nowrap"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
           </div>
           
           {/* Search Container - Centered when open */}
@@ -211,9 +227,10 @@ export function Navbar() {
             </button>
             {[
               { name: "INICIO", href: "/" },
+              { name: "PELÍCULAS", href: "/peliculas" },
               { name: "LICENCIAS", href: "/licensing" },
               { name: "QUIÉNES SOMOS", href: "/about" },
-              { name: "CONTACTO", href: "/#contacto" }
+              { name: "CONTACTO", href: "/contact" }
             ].map((item) => (
               <Link
                 key={item.name}

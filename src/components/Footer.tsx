@@ -75,8 +75,8 @@ export function Footer() {
           <div className="col-span-2 space-y-6 md:col-span-1">
             <h3 className="text-xs font-black tracking-[0.3em] uppercase text-white/20">LEGAL</h3>
             <ul className="space-y-4 text-sm font-bold tracking-tight text-white/40">
-              <li className="cursor-pointer transition-colors hover:text-white uppercase">Privacidad</li>
-              <li className="cursor-pointer transition-colors hover:text-white uppercase">Términos</li>
+              <li className="text-white/20 cursor-default uppercase">Privacidad</li>
+              <li className="text-white/20 cursor-default uppercase">Términos</li>
             </ul>
           </div>
         </div>
