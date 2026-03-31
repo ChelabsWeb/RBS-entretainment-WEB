@@ -5,6 +5,8 @@ import { getMovie } from "@/lib/actions/movies";
 import MovieForm from "@/components/dashboard/MovieForm";
 import DocumentsSection from "@/components/dashboard/DocumentsSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 interface EditMoviePageProps {
   params: Promise<{ id: string }>;
@@ -48,6 +50,13 @@ export default function EditMoviePage({ params }: EditMoviePageProps) {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
+      <Link
+        href="/dashboard/movies"
+        className="inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.15em] uppercase text-white/40 hover:text-white transition-colors"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Volver a Películas
+      </Link>
       <h1 className="text-2xl font-bold text-white">
         {movie.titulo as string}
       </h1>
