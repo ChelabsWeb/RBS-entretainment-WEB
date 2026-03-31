@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/client";
 // Distributor → local logo path mapping
 export const DISTRIBUTOR_LOGOS: Record<string, string> = {
   disney: "/assets/licencias/disney/disney logo.png",
+  universal: "/assets/licencias/universal/ChatGPT Image Feb 19, 2026, 01_23_05 PM.png",
   dreamworks: "/assets/Logos/dreamworks-animation-logo-black-and-white.png",
   illumination: "/assets/Logos/illumination logo.png",
   patagonik: "/assets/Logos/Patagonik_Film_Group_Logo.webp",
@@ -14,6 +15,7 @@ export const DISTRIBUTOR_LOGOS: Record<string, string> = {
 
 export const DISTRIBUTOR_LABELS: Record<string, string> = {
   disney: "Disney",
+  universal: "Universal Pictures",
   dreamworks: "DreamWorks",
   illumination: "Illumination",
   patagonik: "Patagonik",
