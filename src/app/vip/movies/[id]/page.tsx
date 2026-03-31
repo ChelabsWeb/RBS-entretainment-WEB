@@ -3,9 +3,10 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Calendar, Clock, Download, Film, FileText, Star, Tag } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar, Clock, Download, Film, FileText, Star, Tag, Users } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
+import { fetchPeoplePhotos } from "@/lib/tmdb-people";
 
 function resolvePosterUrl(raw: string | null): string | null {
   if (!raw) return null;
@@ -56,6 +57,7 @@ interface Movie {
   genero: string | null;
   anio: number | null;
   director: string | null;
+  elenco: string | null;
 }
 
 interface MovieDocument {
@@ -146,6 +148,14 @@ export default async function MovieDetailPage({
     .limit(1);
 
   const nextMovie = nextMovies && nextMovies.length > 0 ? nextMovies[0] : null;
+
+  // Fetch cast + director photos from TMDB
+  const peopleNames: string[] = [];
+  if (typedMovie.director) peopleNames.push(typedMovie.director);
+  if (typedMovie.elenco) {
+    peopleNames.push(...typedMovie.elenco.split(",").map((n) => n.trim()).filter(Boolean));
+  }
+  const peopleWithPhotos = peopleNames.length > 0 ? await fetchPeoplePhotos(peopleNames) : [];
 
   const posterUrl = typedMovie.poster_url
     ? typedMovie.poster_url.startsWith("http")
@@ -326,6 +336,45 @@ export default async function MovieDetailPage({
           )}
         </div>
       </section>
+
+      {/* Cast & Director */}
+      {peopleWithPhotos.length > 0 && (
+        <section className="mb-10">
+          <h3 className="text-[11px] font-black tracking-[0.25em] uppercase text-[#4f5ea7] mb-4 flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Elenco y Dirección
+          </h3>
+          <div className="flex flex-wrap gap-4">
+            {peopleWithPhotos.map((person, i) => (
+              <div key={i} className="flex flex-col items-center gap-2 w-20">
+                <div className="relative w-16 h-16 rounded-full overflow-hidden border border-white/10 bg-white/5 flex-shrink-0">
+                  {person.photo_url ? (
+                    <Image
+                      src={person.photo_url}
+                      alt={person.name}
+                      fill
+                      sizes="64px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-white/20 text-lg font-bold">
+                      {person.name.charAt(0)}
+                    </div>
+                  )}
+                </div>
+                <span className="text-[10px] text-white/50 text-center leading-tight font-medium">
+                  {person.name}
+                </span>
+                {i === 0 && typedMovie.director && person.name === typedMovie.director && (
+                  <span className="text-[8px] text-[#4f5ea7] uppercase tracking-wider font-bold -mt-1">
+                    Director
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Documents Section */}
       {typedDocuments.length > 0 && (
