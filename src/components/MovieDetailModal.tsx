@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { fetchMovieDetails, getImageUrl, Movie } from "@/lib/movies";
+import { fetchMovieDetails, getImageUrl, Movie, DISTRIBUTOR_LABELS } from "@/lib/movies";
 import { Star, Calendar, Clock, Users, Loader2, Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useTheme } from "@/context/ThemeContext";
@@ -243,15 +243,16 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                 </div>
               )}
 
-              {/* RBS Distribution & Tickets */}
+              {/* Distribution & Cinemas */}
               <div className="space-y-8 pt-6 border-t border-white/5">
-                 <div className="space-y-3">
-                    <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/40">DISTRIBUCIÓN</p>
-                    <div className="flex items-baseline gap-2">
-                       <span className="text-xl font-black tracking-tighter uppercase">RBS</span>
-                       <span className="text-[8px] font-bold tracking-[0.6em] uppercase opacity-40">Uruguay</span>
-                    </div>
-                 </div>
+                 {movie._supabase?.distributor && (
+                   <div className="space-y-3">
+                     <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/40">DISTRIBUIDA POR</p>
+                     <span className="text-xl font-black tracking-tighter uppercase">
+                       {DISTRIBUTOR_LABELS[movie._supabase.distributor] || movie._supabase.distributor}
+                     </span>
+                   </div>
+                 )}
 
                  <div className="space-y-3">
                     <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/40">DISPONIBLE EN</p>
@@ -264,53 +265,35 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                             href={link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-3 px-3 py-3 rounded-sm border border-white/10 hover:border-white/30 transition-all duration-300 bg-white/[0.02] hover:bg-white/5"
+                            className="group flex items-center gap-3 px-3 py-3 rounded-md bg-white hover:bg-white/90 transition-all duration-300"
                           >
-                            {cinema.logo ? (
-                              <div className="h-7 w-12 relative flex-shrink-0">
-                                <Image
-                                  src={cinema.logo}
-                                  alt={cinema.name}
-                                  fill
-                                  sizes="48px"
-                                  className="object-contain"
-                                />
-                              </div>
-                            ) : (
-                              <div
-                                className="h-7 w-7 rounded-sm flex items-center justify-center text-white text-[7px] font-black tracking-tight flex-shrink-0"
-                                style={{ backgroundColor: cinema.color }}
-                              >
-                                {cinema.short.slice(0, 2)}
-                              </div>
-                            )}
-                            <span className="text-[9px] font-black tracking-[0.1em] uppercase text-white/50 group-hover:text-white transition-colors truncate">
+                            <div className={`${cinema.name === "Cines del Este" ? "h-8 w-14" : "h-7 w-12"} relative flex-shrink-0`}>
+                              <Image
+                                src={cinema.logo!}
+                                alt={cinema.name}
+                                fill
+                                sizes="56px"
+                                className="object-contain"
+                              />
+                            </div>
+                            <span className="text-[9px] font-black tracking-[0.1em] uppercase text-black/60 group-hover:text-black transition-colors truncate">
                               {cinema.name}
                             </span>
                           </a>
                         ) : (
                           <div
                             key={cinema.name}
-                            className="flex items-center gap-3 px-3 py-3 rounded-sm border border-white/5 bg-white/[0.01] opacity-30 cursor-not-allowed"
+                            className="flex items-center gap-3 px-3 py-3 rounded-md bg-white/10 opacity-30 cursor-not-allowed"
                           >
-                            {cinema.logo ? (
-                              <div className="h-7 w-12 relative flex-shrink-0 grayscale">
-                                <Image
-                                  src={cinema.logo}
-                                  alt={cinema.name}
-                                  fill
-                                  sizes="48px"
-                                  className="object-contain"
-                                />
-                              </div>
-                            ) : (
-                              <div
-                                className="h-7 w-7 rounded-sm flex items-center justify-center text-white text-[7px] font-black tracking-tight flex-shrink-0 grayscale"
-                                style={{ backgroundColor: cinema.color }}
-                              >
-                                {cinema.short.slice(0, 2)}
-                              </div>
-                            )}
+                            <div className={`${cinema.name === "Cines del Este" ? "h-8 w-14" : "h-7 w-12"} relative flex-shrink-0 grayscale`}>
+                              <Image
+                                src={cinema.logo!}
+                                alt={cinema.name}
+                                fill
+                                sizes="56px"
+                                className="object-contain"
+                              />
+                            </div>
                             <span className="text-[9px] font-black tracking-[0.1em] uppercase text-white/30 truncate">
                               {cinema.name}
                             </span>
