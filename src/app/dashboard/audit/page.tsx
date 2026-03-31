@@ -2,10 +2,28 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { getAuditLog } from "@/lib/actions/audit";
+import { Loader2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const ENTITY_TYPES = [
-  { value: "", label: "Todos" },
-  { value: "movie", label: "Película" },
+  { value: "todos", label: "Todos" },
+  { value: "movie", label: "Pelicula" },
   { value: "user_role", label: "Rol de usuario" },
   { value: "vip_client", label: "Cliente VIP" },
   { value: "schedule", label: "Horario" },
@@ -42,7 +60,7 @@ export default function AuditPage() {
       setEntries(result.data as AuditEntry[]);
       setCount(result.count);
     } catch (err) {
-      console.error("Error cargando log de auditoría:", err);
+      console.error("Error cargando log de auditoria:", err);
     } finally {
       setLoading(false);
     }
@@ -65,110 +83,125 @@ export default function AuditPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 md:p-10">
-      <h1 className="text-2xl font-bold mb-6">Log de Auditoría</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold text-white">Log de Auditoria</h1>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="flex flex-wrap gap-4">
         <div className="flex flex-col gap-1">
-          <label className="text-sm text-zinc-400">Tipo de entidad</label>
-          <select
-            value={entityType}
-            onChange={(e) => {
-              setEntityType(e.target.value);
+          <label className="text-sm text-white/60">Tipo de entidad</label>
+          <Select
+            value={entityType || "todos"}
+            onValueChange={(val) => {
+              setEntityType(val === "todos" ? "" : val);
               setPage(1);
             }}
-            className="bg-zinc-900 border border-zinc-700 rounded-md px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
           >
-            {ENTITY_TYPES.map((t) => (
-              <option key={t.value} value={t.value}>
-                {t.label}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="bg-black border-white/10 text-white w-[200px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-black border-white/10">
+              {ENTITY_TYPES.map((t) => (
+                <SelectItem key={t.value} value={t.value}>
+                  {t.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-lg border border-zinc-800">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-zinc-900 text-zinc-400 text-left">
-              <th className="px-4 py-3 font-medium">Fecha</th>
-              <th className="px-4 py-3 font-medium">Usuario</th>
-              <th className="px-4 py-3 font-medium">Acción</th>
-              <th className="px-4 py-3 font-medium">Tipo</th>
-              <th className="px-4 py-3 font-medium">ID Recurso</th>
-              <th className="px-4 py-3 font-medium">Detalles</th>
-            </tr>
-          </thead>
-          <tbody>
+      <div className="border border-white/10 rounded-lg overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-white/10 hover:bg-transparent">
+              <TableHead className="text-white/60">Fecha</TableHead>
+              <TableHead className="text-white/60">Usuario</TableHead>
+              <TableHead className="text-white/60">Accion</TableHead>
+              <TableHead className="text-white/60">Tipo</TableHead>
+              <TableHead className="text-white/60">ID Recurso</TableHead>
+              <TableHead className="text-white/60">Detalles</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {loading ? (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
-                  Cargando...
-                </td>
-              </tr>
+              <TableRow className="border-white/10 hover:bg-white/[0.02]">
+                <TableCell colSpan={6} className="text-center py-8">
+                  <div className="flex justify-center">
+                    <Loader2 className="h-5 w-5 animate-spin text-white/40" />
+                  </div>
+                </TableCell>
+              </TableRow>
             ) : entries.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-zinc-500">
+              <TableRow className="border-white/10 hover:bg-white/[0.02]">
+                <TableCell
+                  colSpan={6}
+                  className="text-center py-8 text-white/40"
+                >
                   No se encontraron registros.
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ) : (
               entries.map((entry) => (
-                <tr
+                <TableRow
                   key={entry.id}
-                  className="border-t border-zinc-800 hover:bg-zinc-900/50 transition-colors"
+                  className="border-white/10 hover:bg-white/[0.02]"
                 >
-                  <td className="px-4 py-3 whitespace-nowrap">
+                  <TableCell className="whitespace-nowrap">
                     {formatDate(entry.created_at)}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs text-zinc-300">
+                  </TableCell>
+                  <TableCell className="font-mono text-xs text-zinc-300">
                     {entry.user_id.slice(0, 8)}...
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="inline-block bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded text-xs font-medium">
+                  </TableCell>
+                  <TableCell>
+                    <Badge className="bg-amber-500/20 text-amber-400 border-0">
                       {entry.action}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-zinc-300">{entry.entity_type}</td>
-                  <td className="px-4 py-3 font-mono text-xs text-zinc-400">
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-zinc-300">
+                    {entry.entity_type}
+                  </TableCell>
+                  <TableCell className="font-mono text-xs text-zinc-400">
                     {entry.entity_id.slice(0, 12)}
-                  </td>
-                  <td className="px-4 py-3 text-xs text-zinc-500 max-w-xs truncate">
+                  </TableCell>
+                  <TableCell className="text-xs text-zinc-500 max-w-xs truncate">
                     {formatDetails(entry.details)}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between mt-6">
-        <p className="text-sm text-zinc-500">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-white/40">
           Mostrando {entries.length} de {count} registros
         </p>
-        <div className="flex gap-2">
-          <button
+        <div className="flex gap-2 items-center">
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-white/10 text-white hover:bg-white/5"
             disabled={page <= 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="px-3 py-1.5 text-sm rounded-md border border-zinc-700 bg-zinc-900 text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-800 transition-colors"
           >
             Anterior
-          </button>
-          <span className="flex items-center px-3 text-sm text-zinc-400">
-            Página {page} de {totalPages}
+          </Button>
+          <span className="text-sm text-white/40 px-3">
+            Pagina {page} de {totalPages}
           </span>
-          <button
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-white/10 text-white hover:bg-white/5"
             disabled={page >= totalPages}
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            className="px-3 py-1.5 text-sm rounded-md border border-zinc-700 bg-zinc-900 text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-800 transition-colors"
           >
             Siguiente
-          </button>
+          </Button>
         </div>
       </div>
     </div>

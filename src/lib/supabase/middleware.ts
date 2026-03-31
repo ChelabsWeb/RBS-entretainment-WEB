@@ -39,10 +39,29 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user && request.nextUrl.pathname === "/login") {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+  // Role-based routing: single query, reused for all checks
+  if (user && (request.nextUrl.pathname === "/login" || request.nextUrl.pathname.startsWith("/dashboard"))) {
+    const { data: roleData } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .single();
+
+    const isAdmin = !!roleData?.role;
+
+    // Logged-in user on /login → redirect to their portal
+    if (request.nextUrl.pathname === "/login") {
+      const url = request.nextUrl.clone();
+      url.pathname = isAdmin ? "/dashboard" : "/vip";
+      return NextResponse.redirect(url);
+    }
+
+    // Non-admin on /dashboard → redirect to /vip
+    if (!isAdmin) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/vip";
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

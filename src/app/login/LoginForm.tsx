@@ -86,7 +86,8 @@ export function LoginForm() {
         p_email: email,
       });
 
-      const safeRedirect = redirectTo && redirectTo.startsWith("/") && !redirectTo.startsWith("//") ? redirectTo : "/dashboard";
+      // Redirect: middleware handles role-based routing via /login
+      const safeRedirect = redirectTo && redirectTo.startsWith("/") && !redirectTo.startsWith("//") ? redirectTo : "/login";
       window.location.href = safeRedirect;
     } catch (err) {
       console.error("Login error:", err);

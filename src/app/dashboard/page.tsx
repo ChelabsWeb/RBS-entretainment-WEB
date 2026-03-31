@@ -62,13 +62,13 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Heading */}
       <div>
-        <h1 className="text-3xl font-black uppercase tracking-tighter text-white lg:text-4xl">
+        <h1 className="text-2xl font-bold text-white">
           Panel de Administracion
         </h1>
-        <p className="mt-2 text-sm tracking-widest text-white/40">
+        <p className="mt-1 text-sm text-white/40">
           Bienvenido, {user?.email ?? "administrador"}
         </p>
       </div>

@@ -67,7 +67,6 @@ async function MovieFeed() {
     );
   }
 
-  // Group by distributor
   const grouped = new Map<string, VipMovie[]>();
   for (const movie of movies as VipMovie[]) {
     const key = movie.distributor?.trim() || "__otros__";
@@ -78,7 +77,6 @@ async function MovieFeed() {
     });
   }
 
-  // Sort alphabetically, "Otros" last
   const sortedGroups = [...grouped.entries()].sort((a, b) => {
     if (a[0] === "__otros__") return 1;
     if (b[0] === "__otros__") return -1;
@@ -95,21 +93,24 @@ async function MovieFeed() {
           title={key === "__otros__" ? "Otros" : (DISTRIBUTOR_LABELS[key] || key)}
           movies={groupMovies}
           count={groupMovies.length}
+          basePath="/vip/movies"
         />
       ))}
     </div>
   );
 }
 
-export default function VipPage() {
+export default function VipPortalPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-black tracking-tighter uppercase">
-          Catálogo
-        </h1>
-        <p className="mt-1 text-[12px] text-white/40 tracking-wide">
-          Información de exhibición actualizada para nuestros socios
+        <div className="flex items-center gap-3 mb-1">
+          <h1 className="text-2xl font-bold text-white">
+            Vista del Portal VIP
+          </h1>
+        </div>
+        <p className="text-sm text-white/40">
+          Vista previa del catálogo tal como lo ven los exhibidores
         </p>
       </div>
 
