@@ -42,9 +42,9 @@ interface TMDBMovieDetails {
 
 const CINEMA_EXHIBITORS = [
   { name: "Movie", short: "MOV", color: "#FF6B35", linkKey: "link_movie", logo: "/assets/Logos/movie-logo.png" },
-  { name: "Life Cinemas", short: "LIFE", color: "#e5361f", linkKey: "link_life_cinemas", logo: null },
-  { name: "Grupo Cine", short: "GC", color: "#4f5ea7", linkKey: "link_grupo_cine", logo: null },
-  { name: "Cines del Este", short: "ESTE", color: "#2ba137", linkKey: "link_cines_del_este", logo: null },
+  { name: "Life Cinemas", short: "LIFE", color: "#e5361f", linkKey: "link_life_cinemas", logo: "/assets/Logos/life-cinemas-logo.webp" },
+  { name: "Grupo Cine", short: "GC", color: "#4f5ea7", linkKey: "link_grupo_cine", logo: "/assets/Logos/grupocine-logo.png" },
+  { name: "Cines del Este", short: "ESTE", color: "#2ba137", linkKey: "link_cines_del_este", logo: "/assets/Logos/cines-del-este-logo.jpg" },
 ];
 
 export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, currentIndex = 0, onNavigate }: MovieDetailModalProps) {
