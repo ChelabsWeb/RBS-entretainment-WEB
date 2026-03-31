@@ -192,7 +192,7 @@ export function Hero({
                     width={600}
                     height={240}
                     quality={100}
-                    className="object-contain opacity-[0.12] w-[60vw] max-w-xl md:max-w-2xl lg:max-w-3xl select-none pointer-events-none"
+                    className="object-contain opacity-[0.06] w-[40vw] max-w-sm md:max-w-lg lg:max-w-xl select-none pointer-events-none"
                     priority
                   />
                 </motion.div>

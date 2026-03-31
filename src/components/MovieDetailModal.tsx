@@ -243,6 +243,31 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                 </div>
               )}
 
+              {/* Supabase cast (when no TMDB cast available) */}
+              {!details?.credits?.cast && movie._supabase?.elenco && (
+                <div className="space-y-4">
+                  <h4 className="flex items-center gap-4 text-[9px] font-black tracking-[0.4em] uppercase text-white/40">
+                    <Users className="h-4 w-4 text-theme-primary" />
+                    ELENCO
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {movie._supabase.elenco.split(",").map((name, i) => (
+                      <span
+                        key={i}
+                        className="text-[10px] font-bold tracking-wide text-white/60 border border-white/10 rounded-full px-3 py-1"
+                      >
+                        {name.trim()}
+                      </span>
+                    ))}
+                  </div>
+                  {movie._supabase.director && (
+                    <p className="text-[10px] text-white/40">
+                      <span className="font-bold text-white/50">Dir.</span> {movie._supabase.director}
+                    </p>
+                  )}
+                </div>
+              )}
+
               {/* Distribution & Cinemas */}
               <div className="space-y-8 pt-6 border-t border-white/5">
                  {movie._supabase?.distributor && (

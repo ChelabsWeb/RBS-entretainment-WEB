@@ -40,6 +40,7 @@ export interface SupabaseMovie {
   genero: string | null;
   anio: number | null;
   director: string | null;
+  elenco: string | null;
   link_movie: string | null;
   link_life_cinemas: string | null;
   link_grupo_cine: string | null;
