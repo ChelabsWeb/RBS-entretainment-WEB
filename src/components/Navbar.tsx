@@ -73,7 +73,7 @@ export function Navbar() {
             "flex items-center transition-all duration-300 z-10",
             isSearchOpen ? "w-0 opacity-0 pointer-events-none" : "w-10 opacity-100"
           )}>
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-1 hover:opacity-70 transition-opacity">
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-1 hover:opacity-70 transition-opacity" aria-label="Abrir menú de navegación">
               <Menu className="h-6 w-6" />
             </button>
           </div>
@@ -189,6 +189,7 @@ export function Navbar() {
                 }
               }}
               className="p-2 hover:opacity-70 transition-opacity text-white"
+              aria-label={isSearchOpen ? "Cerrar búsqueda" : "Abrir búsqueda"}
             >
               {isSearchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
             </button>
@@ -203,7 +204,7 @@ export function Navbar() {
                   </button>
                 </div>
               ) : (
-                <Link href="/login" className="p-2 hover:opacity-70 transition-opacity text-white">
+                <Link href="/login" className="p-2 hover:opacity-70 transition-opacity text-white" aria-label="Iniciar sesión">
                   <LogIn className="h-5 w-5" />
                 </Link>
               )
@@ -222,6 +223,7 @@ export function Navbar() {
             <button 
               onClick={() => setIsMenuOpen(false)}
               className="absolute top-10 right-10 text-white/40 hover:text-white transition-colors"
+              aria-label="Cerrar menú"
             >
               <X className="h-8 w-8" />
             </button>

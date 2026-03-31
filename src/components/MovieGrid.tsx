@@ -98,7 +98,7 @@ function MovieCard({
               </span>
            </div>
            <div className="h-4 w-[1px] bg-white/10" />
-           <span className="text-[10px] font-black tracking-[0.2em] uppercase text-white/20">
+           <span className="text-[10px] font-black tracking-[0.2em] uppercase text-white/40">
               International Sensations
            </span>
         </div>
@@ -107,7 +107,7 @@ function MovieCard({
           {movie.overview}
         </p>
 
-        <div className="pt-4 flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-white/20 group-hover:text-theme-primary transition-colors">
+        <div className="pt-4 flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-white/40 group-hover:text-theme-primary transition-colors">
             VER DETALLES <ChevronRight className="h-4 w-4" />
         </div>
       </div>
@@ -186,7 +186,7 @@ export function MovieGrid({ enCartelTitles, proximamenteTitles }: { enCartelTitl
     <section id="movies" className="bg-black py-32 px-6 md:px-12 border-t border-white/5">
       <div className="mb-24 flex flex-col gap-12 border-b border-white/10 pb-12">
         <div className="w-full flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <h2 className="text-sm font-bold tracking-[0.6em] uppercase text-white/40">
+          <h2 className="text-sm font-bold tracking-[0.6em] uppercase text-white/50">
             CATÁLOGO 2026
           </h2>
           
@@ -224,7 +224,7 @@ export function MovieGrid({ enCartelTitles, proximamenteTitles }: { enCartelTitl
           </p>
           
           <div className="space-y-4 flex flex-col items-center">
-             <p className="text-xs font-bold tracking-[0.2em] uppercase text-white/20 max-w-md">
+             <p className="text-xs font-bold tracking-[0.2em] uppercase text-white/40 max-w-md">
                 EXPLORA NUESTRO CATÁLOGO ORDENADO POR FECHA DE LANZAMIENTO.
              </p>
           </div>

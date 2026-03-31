@@ -25,7 +25,7 @@ export function ContactSection() {
           >
             En Construcción
           </h2>
-          <p className="text-sm font-black uppercase tracking-[0.3em] text-white/40 text-center">
+          <p className="text-sm font-black uppercase tracking-[0.3em] text-white/50 text-center">
             Próximamente disponible
           </p>
         </div>

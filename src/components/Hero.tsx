@@ -220,6 +220,7 @@ export function Hero({
                     </button>
                     <button
                       onClick={handlePlayTrailer}
+                      aria-label="Reproducir tráiler"
                       className="group flex h-16 w-16 items-center justify-center rounded-full border-2 border-theme-primary bg-transparent text-theme-primary shadow-2xl transition-all duration-500 hover:scale-110 hover:bg-theme-primary hover:text-white active:scale-95"
                     >
                       <Play className="h-6 w-6 ml-1 fill-current" />
@@ -235,12 +236,14 @@ export function Hero({
       <div className="absolute bottom-12 right-12 z-20 hidden items-center gap-4 md:flex">
         <button
           onClick={prevSlide}
+          aria-label="Película anterior"
           className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-theme-primary bg-transparent text-theme-primary transition-all duration-500 hover:scale-110 hover:bg-theme-primary hover:text-white active:scale-95"
         >
           <ChevronLeft className="h-8 w-8" />
         </button>
         <button
           onClick={nextSlide}
+          aria-label="Siguiente película"
           className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-theme-primary bg-transparent text-theme-primary transition-all duration-500 hover:scale-110 hover:bg-theme-primary hover:text-white active:scale-95"
         >
           <ChevronRight className="h-8 w-8" />
@@ -252,6 +255,7 @@ export function Hero({
           <button
             key={i}
             onClick={() => setCurrentSlide(i)}
+            aria-label={`Ir a película ${i + 1}`}
             className={`transition-all duration-500 ${
               i === currentSlide
                 ? "h-2 w-16 bg-theme-primary rounded-full shadow-[0_0_20px_rgba(var(--theme-primary-rgb),0.5)]"
@@ -289,6 +293,7 @@ export function Hero({
             />
             <button
               onClick={() => setFullScreenTrailer(null)}
+              aria-label="Cerrar tráiler"
               className="absolute top-10 right-10 z-[110] rounded-full bg-white/10 p-4 backdrop-blur-xl transition-all hover:bg-white hover:text-black"
             >
               <X className="h-6 w-6" />

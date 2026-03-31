@@ -71,6 +71,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className="dark">
+      <head>
+        <link rel="preconnect" href="https://ibsffdlzvbeiolyfpyoy.supabase.co" />
+        <link rel="dns-prefetch" href="https://ibsffdlzvbeiolyfpyoy.supabase.co" />
+        <link rel="preconnect" href="https://image.tmdb.org" />
+        <link rel="dns-prefetch" href="https://image.tmdb.org" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white overflow-x-hidden`}
       >

@@ -108,12 +108,14 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
           <>
             <button
               onClick={handlePrev}
+              aria-label="Película anterior"
               className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-[calc(100%+20px)] z-[60] items-center justify-center rounded-full bg-black/70 border border-white/15 p-4 backdrop-blur-xl text-white transition-all duration-300 hover:bg-theme-primary hover:border-theme-primary hover:scale-110 active:scale-95"
             >
               <ChevronLeft className="h-9 w-9" />
             </button>
             <button
               onClick={handleNext}
+              aria-label="Siguiente película"
               className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-[calc(100%+20px)] z-[60] items-center justify-center rounded-full bg-black/70 border border-white/15 p-4 backdrop-blur-xl text-white transition-all duration-300 hover:bg-theme-primary hover:border-theme-primary hover:scale-110 active:scale-95"
             >
               <ChevronRight className="h-9 w-9" />
@@ -124,6 +126,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
         {/* Close Button */}
         <button
           onClick={onClose}
+          aria-label="Cerrar"
           className="absolute top-6 right-6 z-[60] rounded-full bg-white/5 p-2 backdrop-blur-3xl transition-all hover:bg-theme-primary hover:text-white active:scale-90"
         >
           <X className="h-5 w-5" />
@@ -175,7 +178,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
 
               {/* Bottom: Compact Synopsis */}
               <div className="space-y-4 max-w-2xl">
-                 <h4 className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20">SINOPSIS</h4>
+                 <h4 className="text-[9px] font-black tracking-[0.4em] uppercase text-white/40">SINOPSIS</h4>
                  <DialogDescription className="text-sm md:text-base font-light leading-relaxed text-white/50">
                   {movie.overview}
                  </DialogDescription>
@@ -191,14 +194,14 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
               {/* Metadata Grid (Compact) */}
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-1">
-                   <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20">ESTRENO</p>
+                   <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/40">ESTRENO</p>
                    <div className="flex items-center gap-2 text-xl font-bold tracking-tighter">
                       <Calendar className="h-4 w-4 text-theme-primary" />
                       {movie.release_date.split("-")[0]}
                    </div>
                 </div>
                 <div className="space-y-1">
-                   <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20">RATING</p>
+                   <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/40">RATING</p>
                    <div className="flex items-center gap-2 text-xl font-bold tracking-tighter">
                       <Star className="h-4 w-4 fill-theme-primary text-theme-primary" />
                       {movie.vote_average.toFixed(1)}
@@ -209,7 +212,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
               {/* Cast List - ONLY TOP 4 (Photos Layout) */}
               {details?.credits?.cast && (
                 <div className="space-y-6">
-                  <h4 className="flex items-center gap-4 text-[9px] font-black tracking-[0.4em] uppercase text-white/20">
+                  <h4 className="flex items-center gap-4 text-[9px] font-black tracking-[0.4em] uppercase text-white/40">
                     <Users className="h-4 w-4 text-theme-primary" />
                     ELENCO PRINCIPAL
                   </h4>
@@ -240,15 +243,15 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
               {/* RBS Distribution & Tickets */}
               <div className="space-y-8 pt-6 border-t border-white/5">
                  <div className="space-y-3">
-                    <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20">DISTRIBUCIÓN</p>
+                    <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/40">DISTRIBUCIÓN</p>
                     <div className="flex items-baseline gap-2">
                        <span className="text-xl font-black tracking-tighter uppercase">RBS</span>
-                       <span className="text-[8px] font-bold tracking-[0.6em] uppercase opacity-20">Uruguay</span>
+                       <span className="text-[8px] font-bold tracking-[0.6em] uppercase opacity-40">Uruguay</span>
                     </div>
                  </div>
 
                  <div className="space-y-3">
-                    <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20">DISPONIBLE EN</p>
+                    <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/40">DISPONIBLE EN</p>
                     <div className="grid grid-cols-2 gap-2">
                       {CINEMA_EXHIBITORS.map((cinema) => {
                         const link = movie._supabase?.[cinema.linkKey as keyof typeof movie._supabase] as string | null | undefined;
