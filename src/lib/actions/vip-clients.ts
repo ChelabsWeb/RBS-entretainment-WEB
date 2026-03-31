@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { logAction } from "@/lib/actions/audit";
 import { vipClientSchema } from "@/lib/validations/vip-client";
 import type { VipClientFormValues } from "@/lib/validations/vip-client";
@@ -96,6 +97,26 @@ export async function createVipClient(formData: VipClientFormValues) {
     apellido: data.apellido,
     email: data.email,
   });
+
+  // Create auth account and send invite email via service role
+  const serviceSupabase = createServiceClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  );
+
+  const { error: inviteError } = await serviceSupabase.auth.admin.inviteUserByEmail(
+    data.email,
+    {
+      data: { nombre: data.nombre, apellido: data.apellido },
+      redirectTo: "https://rbsentertainment.com.uy/vip",
+    }
+  );
+
+  if (inviteError) {
+    console.error("Error sending VIP invite:", inviteError.message);
+    // Don't throw — client was created, invite is secondary
+  }
 
   return data;
 }
