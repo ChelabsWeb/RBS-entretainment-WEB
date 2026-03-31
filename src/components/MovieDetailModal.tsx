@@ -161,6 +161,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                       src={getImageUrl(movie.backdrop_path, "original")}
                       alt={movie.title}
                       fill
+                      sizes="(max-width: 1024px) 90vw, 560px"
                       className="object-cover opacity-40 transition-transform duration-1000 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -221,6 +222,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                                  src={getImageUrl(person.profile_path, "w500")}
                                  alt={person.name}
                                  fill
+                                 sizes="96px"
                                  className="object-cover grayscale transition-all group-hover:grayscale-0"
                                />
                              ) : (

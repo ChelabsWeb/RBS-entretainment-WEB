@@ -68,6 +68,7 @@ export function MovieCarousel({ title, movies, onMovieClick }: MovieCarouselProp
                 src={getImageUrl(movie.poster_path, "w500")}
                 alt={movie.title}
                 fill
+                sizes="(max-width: 768px) 200px, 280px"
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">

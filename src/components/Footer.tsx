@@ -14,11 +14,12 @@ export function Footer() {
         <div className="flex flex-col justify-between">
           <div>
             <div className="relative h-12 w-48 mb-6">
-              <Image 
-                src="/assets/Logos/RBS logo color.png" 
-                alt="RBS Entertainment" 
-                fill 
-                className="object-contain object-left" 
+              <Image
+                src="/assets/Logos/RBS logo color.png"
+                alt="RBS Entertainment"
+                fill
+                sizes="192px"
+                className="object-contain object-left"
               />
             </div>
             <div className="mt-8 space-y-4 max-w-md">

@@ -35,6 +35,7 @@ export default function VipLayout({ children }: { children: React.ReactNode }) {
                 src="/assets/Logos/RBS logo blanco footer.png"
                 alt="RBS Entertainment"
                 fill
+                sizes="96px"
                 className="object-contain"
                 priority
               />

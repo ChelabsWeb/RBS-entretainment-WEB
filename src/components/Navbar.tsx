@@ -88,6 +88,7 @@ export function Navbar() {
                 src={logoSrc}
                 alt="RBS Entertainment"
                 fill
+                sizes="(max-width: 768px) 128px, 192px"
                 className="object-contain scale-100"
                 priority
               />
@@ -138,6 +139,7 @@ export function Navbar() {
                               src={getImageUrl(movie.poster_path, 'w92')}
                               alt={movie.title}
                               fill
+                              sizes="32px"
                               className="object-cover"
                             />
                           </div>

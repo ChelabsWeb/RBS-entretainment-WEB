@@ -153,8 +153,39 @@ export default async function MovieDetailPage({
       : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/movie-posters/${typedMovie.poster_url}`
     : null;
 
+  // Build Movie JSON-LD schema (only include non-null fields)
+  const movieJsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Movie",
+    name: typedMovie.titulo,
+  };
+  if (typedMovie.sinopsis) movieJsonLd.description = typedMovie.sinopsis;
+  if (posterUrl) movieJsonLd.image = posterUrl;
+  if (typedMovie.fecha_estreno) movieJsonLd.datePublished = typedMovie.fecha_estreno;
+  if (typedMovie.duracion_minutos) movieJsonLd.duration = `PT${typedMovie.duracion_minutos}M`;
+  if (typedMovie.genero) movieJsonLd.genre = typedMovie.genero;
+  if (typedMovie.director) movieJsonLd.director = { "@type": "Person", name: typedMovie.director };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://rbsentertainment.com.uy" },
+      { "@type": "ListItem", position: 2, name: "Catálogo VIP", item: "https://rbsentertainment.com.uy/vip" },
+      { "@type": "ListItem", position: 3, name: typedMovie.titulo },
+    ],
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(movieJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Top navigation */}
       <div className="flex items-center justify-between mb-8">
         <Link

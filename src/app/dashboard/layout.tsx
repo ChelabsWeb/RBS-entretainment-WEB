@@ -98,6 +98,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             src="/assets/Logos/RBS logo blanco footer.png"
             alt="RBS Entertainment"
             fill
+            sizes="112px"
             className="object-contain object-left"
             priority
           />

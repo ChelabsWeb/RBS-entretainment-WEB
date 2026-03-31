@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { Suspense } from "react";
 import { Film } from "lucide-react";
 import { DISTRIBUTOR_LABELS } from "@/lib/movies";
 import { VipMovieCarousel } from "@/components/VipMovieCarousel";
+
+export const metadata: Metadata = {
+  title: "Catálogo VIP",
+  description:
+    "Portal de exhibidores - Catálogo de películas con información de distribución actualizada para socios de RBS Entertainment.",
+};
 
 interface VipMovie {
   id: string;

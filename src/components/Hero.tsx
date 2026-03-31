@@ -150,6 +150,7 @@ export function Hero({
               src={getImageUrl(currentMovie.backdrop_path, "original")}
               alt={currentMovie.title}
               fill
+              sizes="100vw"
               className="object-cover opacity-60 scale-105"
               priority
             />

@@ -538,6 +538,7 @@ export default function MovieForm({ movie, mode }: MovieFormProps) {
                     src={posterPreview}
                     alt="Vista previa del p&oacute;ster"
                     fill
+                    sizes="128px"
                     className="object-cover"
                   />
                 </div>
@@ -578,6 +579,7 @@ export default function MovieForm({ movie, mode }: MovieFormProps) {
                     src={heroPreview}
                     alt="Vista previa del hero"
                     fill
+                    sizes="192px"
                     className="object-cover"
                   />
                 </div>
