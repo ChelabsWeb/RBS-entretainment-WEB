@@ -224,18 +224,11 @@ export function Hero({
                     transition={{ delay: 0.7, duration: 0.8 }}
                     className={`mt-12 flex flex-col gap-6 ${isLeftAligned ? "items-start" : "items-center"}`}
                   >
-                    <button 
+                    <button
                       onClick={() => setSelectedMovie(currentMovie)}
                       className="rounded-full border-2 border-theme-primary bg-transparent px-8 md:px-14 py-3 md:py-4 font-black tracking-[0.4em] text-theme-primary transition-all duration-500 hover:bg-theme-primary hover:text-white uppercase text-[10px]"
                     >
                       DETALLES
-                    </button>
-                    <button
-                      onClick={handlePlayTrailer}
-                      aria-label="Reproducir tráiler"
-                      className="group flex h-16 w-16 items-center justify-center rounded-full border-2 border-theme-primary bg-transparent text-theme-primary shadow-2xl transition-all duration-500 hover:scale-110 hover:bg-theme-primary hover:text-white active:scale-95"
-                    >
-                      <Play className="h-6 w-6 ml-1 fill-current" />
                     </button>
                   </motion.div>
                 </>
@@ -244,6 +237,18 @@ export function Hero({
           </div>
         </motion.div>
       </AnimatePresence>
+
+      {/* Play button - bottom left, desktop only */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.8, duration: 0.5 }}
+        onClick={handlePlayTrailer}
+        aria-label="Reproducir tráiler"
+        className="absolute bottom-12 left-12 z-20 hidden md:flex h-16 w-16 items-center justify-center rounded-full border-2 border-theme-primary bg-transparent text-theme-primary shadow-2xl transition-all duration-500 hover:scale-110 hover:bg-theme-primary hover:text-white active:scale-95"
+      >
+        <Play className="h-6 w-6 ml-1 fill-current" />
+      </motion.button>
 
       <div className="absolute bottom-12 right-12 z-20 hidden items-center gap-4 md:flex">
         <button

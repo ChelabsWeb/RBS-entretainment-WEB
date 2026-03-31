@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Plus, Loader2, Star, Calendar, ChevronRight } from "lucide-react";
+import { Plus, Loader2, Calendar, ChevronRight } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import { fetchNowPlayingMovies, fetchUpcomingMovies, getImageUrl, Movie, searchMovie } from "@/lib/movies";
 import { MovieDetailModal } from "./MovieDetailModal";
@@ -92,15 +92,8 @@ function MovieCard({
         </div>
 
         <div className="flex items-center gap-6">
-           <div className="flex items-center gap-2">
-              <Star className="h-4 w-4 fill-theme-primary text-theme-primary" />
-              <span className="text-sm font-black tracking-tighter text-white">
-                {movie.vote_average.toFixed(1)}
-              </span>
-           </div>
-           <div className="h-4 w-[1px] bg-white/10" />
            <span className="text-[10px] font-black tracking-[0.2em] uppercase text-white/40">
-              International Sensations
+              {movie.release_date ? movie.release_date.split("-")[0] : ""}
            </span>
         </div>
 

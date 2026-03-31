@@ -8,7 +8,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { fetchMovieDetails, getImageUrl, Movie } from "@/lib/movies";
-import { Star, Calendar, Users, Loader2, Play, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Calendar, Clock, Users, Loader2, Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useTheme } from "@/context/ThemeContext";
 
@@ -23,6 +23,7 @@ interface MovieDetailModalProps {
 }
 
 interface TMDBMovieDetails {
+  runtime?: number;
   videos?: {
     results: {
       type: string;
@@ -202,10 +203,10 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                    </div>
                 </div>
                 <div className="space-y-1">
-                   <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/40">RATING</p>
+                   <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/40">DURACIÓN</p>
                    <div className="flex items-center gap-2 text-xl font-bold tracking-tighter">
-                      <Star className="h-4 w-4 fill-theme-primary text-theme-primary" />
-                      {movie.vote_average.toFixed(1)}
+                      <Clock className="h-4 w-4 text-theme-primary" />
+                      {details?.runtime ? `${details.runtime} min` : "—"}
                    </div>
                 </div>
               </div>
