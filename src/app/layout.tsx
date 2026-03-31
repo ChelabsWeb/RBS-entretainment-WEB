@@ -32,12 +32,14 @@ export const metadata: Metadata = {
     title: "RBS Entertainment",
     description:
       "Agencia especializada en distribución y licenciamiento cinematográfico en Uruguay. Representantes de Disney, Universal Studios y Paramount Pictures.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RBS Entertainment" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "RBS Entertainment",
     description:
       "Agencia especializada en distribución y licenciamiento cinematográfico en Uruguay.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -64,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="es" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black text-white overflow-x-hidden`}
       >

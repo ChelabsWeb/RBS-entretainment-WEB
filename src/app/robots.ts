@@ -6,9 +6,9 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/dashboard/*', '/vip/*', '/login/*'],
+        disallow: ['/dashboard/*', '/vip/*', '/login', '/login/*', '/api/*'],
       },
     ],
-    sitemap: 'https://rbs-entretainment-web.vercel.app/sitemap.xml',
+    sitemap: 'https://rbsentertainment.com.uy/sitemap.xml',
   }
 }

@@ -1,11 +1,11 @@
 import type { MetadataRoute } from 'next'
 
-const BASE_URL = 'https://rbs-entretainment-web.vercel.app'
+const BASE_URL = 'https://rbsentertainment.com.uy'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date()
 
-  const staticRoutes: MetadataRoute.Sitemap = [
+  return [
     {
       url: BASE_URL,
       lastModified,
@@ -36,13 +36,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'yearly',
       priority: 0.3,
     },
-    {
-      url: `${BASE_URL}/login`,
-      lastModified,
-      changeFrequency: 'yearly',
-      priority: 0.2,
-    },
   ]
-
-  return staticRoutes
 }
