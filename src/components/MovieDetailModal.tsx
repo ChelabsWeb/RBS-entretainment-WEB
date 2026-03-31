@@ -41,10 +41,10 @@ interface TMDBMovieDetails {
 }
 
 const CINEMA_EXHIBITORS = [
-  { name: "Movie", short: "MOV", color: "#FF6B35", linkKey: "link_movie" },
-  { name: "Life Cinemas", short: "LIFE", color: "#e5361f", linkKey: "link_life_cinemas" },
-  { name: "Grupo Cine", short: "GC", color: "#4f5ea7", linkKey: "link_grupo_cine" },
-  { name: "Cines del Este", short: "ESTE", color: "#2ba137", linkKey: "link_cines_del_este" },
+  { name: "Movie", short: "MOV", color: "#FF6B35", linkKey: "link_movie", logo: "/assets/Logos/movie-logo.png" },
+  { name: "Life Cinemas", short: "LIFE", color: "#e5361f", linkKey: "link_life_cinemas", logo: null },
+  { name: "Grupo Cine", short: "GC", color: "#4f5ea7", linkKey: "link_grupo_cine", logo: null },
+  { name: "Cines del Este", short: "ESTE", color: "#2ba137", linkKey: "link_cines_del_este", logo: null },
 ];
 
 export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, currentIndex = 0, onNavigate }: MovieDetailModalProps) {
@@ -264,30 +264,54 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                             href={link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-2 px-3 py-2.5 rounded-sm border border-white/10 hover:border-white/30 transition-all duration-300 bg-white/[0.02] hover:bg-white/5"
+                            className="group flex items-center gap-3 px-3 py-3 rounded-sm border border-white/10 hover:border-white/30 transition-all duration-300 bg-white/[0.02] hover:bg-white/5"
                           >
-                            <div
-                              className="h-6 w-6 rounded-sm flex items-center justify-center text-white text-[7px] font-black tracking-tight flex-shrink-0"
-                              style={{ backgroundColor: cinema.color }}
-                            >
-                              {cinema.short.slice(0, 2)}
-                            </div>
-                            <span className="text-[8px] font-black tracking-[0.15em] uppercase text-white/50 group-hover:text-white transition-colors truncate">
+                            {cinema.logo ? (
+                              <div className="h-7 w-12 relative flex-shrink-0">
+                                <Image
+                                  src={cinema.logo}
+                                  alt={cinema.name}
+                                  fill
+                                  sizes="48px"
+                                  className="object-contain"
+                                />
+                              </div>
+                            ) : (
+                              <div
+                                className="h-7 w-7 rounded-sm flex items-center justify-center text-white text-[7px] font-black tracking-tight flex-shrink-0"
+                                style={{ backgroundColor: cinema.color }}
+                              >
+                                {cinema.short.slice(0, 2)}
+                              </div>
+                            )}
+                            <span className="text-[9px] font-black tracking-[0.1em] uppercase text-white/50 group-hover:text-white transition-colors truncate">
                               {cinema.name}
                             </span>
                           </a>
                         ) : (
                           <div
                             key={cinema.name}
-                            className="flex items-center gap-2 px-3 py-2.5 rounded-sm border border-white/5 bg-white/[0.01] opacity-40 cursor-not-allowed"
+                            className="flex items-center gap-3 px-3 py-3 rounded-sm border border-white/5 bg-white/[0.01] opacity-30 cursor-not-allowed"
                           >
-                            <div
-                              className="h-6 w-6 rounded-sm flex items-center justify-center text-white text-[7px] font-black tracking-tight flex-shrink-0 grayscale"
-                              style={{ backgroundColor: cinema.color }}
-                            >
-                              {cinema.short.slice(0, 2)}
-                            </div>
-                            <span className="text-[8px] font-black tracking-[0.15em] uppercase text-white/30 truncate">
+                            {cinema.logo ? (
+                              <div className="h-7 w-12 relative flex-shrink-0 grayscale">
+                                <Image
+                                  src={cinema.logo}
+                                  alt={cinema.name}
+                                  fill
+                                  sizes="48px"
+                                  className="object-contain"
+                                />
+                              </div>
+                            ) : (
+                              <div
+                                className="h-7 w-7 rounded-sm flex items-center justify-center text-white text-[7px] font-black tracking-tight flex-shrink-0 grayscale"
+                                style={{ backgroundColor: cinema.color }}
+                              >
+                                {cinema.short.slice(0, 2)}
+                              </div>
+                            )}
+                            <span className="text-[9px] font-black tracking-[0.1em] uppercase text-white/30 truncate">
                               {cinema.name}
                             </span>
                           </div>
@@ -295,14 +319,6 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                       })}
                     </div>
                  </div>
-
-                 <button className="w-full relative group overflow-hidden px-6 py-4 rounded-full bg-white text-black text-[9px] font-black tracking-[0.4em] uppercase transition-all hover:bg-theme-primary hover:text-white active:scale-95 shadow-xl">
-                    RESERVAR TICKETS
-                 </button>
-
-                 <p className="text-center text-[7px] font-black tracking-[1em] text-white/10 uppercase pt-4">
-                    CINEMA EXPERIENCE
-                 </p>
               </div>
 
             </div>
