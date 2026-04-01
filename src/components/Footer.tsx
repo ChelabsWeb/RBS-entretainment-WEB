@@ -9,7 +9,7 @@ export function Footer() {
   const { theme } = useTheme();
 
   return (
-    <footer className="border-t border-white/5 bg-black px-6 py-12 md:px-12 md:py-32">
+    <footer className="border-t border-white/5 bg-black px-6 py-12 md:px-12 md:pt-32 md:pb-12">
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
         <div className="flex flex-col justify-between max-lg:items-center">
           <div className="max-lg:flex max-lg:flex-col max-lg:items-center">
