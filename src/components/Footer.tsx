@@ -22,25 +22,16 @@ export function Footer() {
                 className="object-contain"
               />
             </div>
-            <div className="mt-8 space-y-4 max-w-md">
-              <div className="flex items-start gap-4 justify-center lg:justify-start">
-                <MapPin className="h-4 w-4 mt-1 text-white/40 flex-shrink-0" />
-                <p className="text-sm font-light leading-relaxed text-white/40 uppercase">
-                  Luis A. De Herrera 1284 – WTC Torre 2 of. 1706. Montevideo, Uruguay.
-                </p>
-              </div>
-              <div className="flex items-center gap-4 justify-center lg:justify-start">
-                <Mail className="h-4 w-4 text-white/40 flex-shrink-0" />
-                <p className="text-sm font-light leading-relaxed text-white/40">
-                  contacto@rbs.com.uy
-                </p>
-              </div>
-              <div className="flex items-center gap-4 justify-center lg:justify-start">
-                <Phone className="h-4 w-4 text-white/40 flex-shrink-0" />
-                <p className="text-sm font-light leading-relaxed text-white/40">
-                  +598 2622 2222
-                </p>
-              </div>
+            <div className="mt-8 space-y-3 text-center lg:text-left">
+              <p className="text-sm font-light leading-relaxed text-white/40 uppercase">
+                Luis A. De Herrera 1284 – WTC Torre 2 of. 1706. Montevideo, Uruguay.
+              </p>
+              <p className="text-sm font-light text-white/40">
+                contacto@rbs.com.uy
+              </p>
+              <p className="text-sm font-light text-white/40">
+                +598 2622 2222
+              </p>
             </div>
           </div>
           <div className="mt-12 text-center lg:text-left">
