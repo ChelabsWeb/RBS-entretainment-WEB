@@ -36,20 +36,24 @@ function generatePassword(): string {
   return password;
 }
 
-async function generateCredentialsPDF(email: string, password: string, nombre: string) {
+async function generateCredentialsPDF(
+  email: string,
+  password: string,
+  nombre: string,
+  options?: { download?: boolean }
+): Promise<string> {
   const { jsPDF } = await import("jspdf");
 
   const W = 130;
   const H = 80;
   const pad = 12;
-  // jsPDF format takes [height, width] in portrait — we use landscape to get W > H
   const doc = new jsPDF({ unit: "mm", format: [H, W], orientation: "landscape" });
 
   // Full black background
   doc.setFillColor(10, 10, 10);
   doc.rect(0, 0, W, H, "F");
 
-  // Load logo — natural ratio is ~2.5:1, so 28x11 keeps proportions
+  // Load logo
   try {
     const logoImg = new Image();
     logoImg.crossOrigin = "anonymous";
@@ -68,24 +72,20 @@ async function generateCredentialsPDF(email: string, password: string, nombre: s
     doc.text("RBS", pad, 14);
   }
 
-  // "Portal VIP" label — top right
   doc.setTextColor(100, 100, 100);
   doc.setFontSize(5.5);
   doc.setFont("helvetica", "normal");
   doc.text("PORTAL DE EXHIBIDORES", W - pad, 11, { align: "right" });
 
-  // Divider
   doc.setDrawColor(60, 60, 60);
   doc.setLineWidth(0.15);
   doc.line(pad, 24, W - pad, 24);
 
-  // Name
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
   doc.text(nombre, pad, 32);
 
-  // Email
   doc.setTextColor(120, 120, 120);
   doc.setFontSize(5.5);
   doc.setFont("helvetica", "normal");
@@ -95,7 +95,6 @@ async function generateCredentialsPDF(email: string, password: string, nombre: s
   doc.setFont("helvetica", "bold");
   doc.text(email, pad, 45);
 
-  // Password
   doc.setTextColor(120, 120, 120);
   doc.setFontSize(5.5);
   doc.setFont("helvetica", "normal");
@@ -105,17 +104,21 @@ async function generateCredentialsPDF(email: string, password: string, nombre: s
   doc.setFont("helvetica", "bold");
   doc.text(password, pad, 60);
 
-  // Footer divider
   doc.setDrawColor(40, 40, 40);
   doc.line(pad, 68, W - pad, 68);
 
-  // Footer URL
   doc.setTextColor(80, 80, 80);
   doc.setFontSize(5);
   doc.setFont("helvetica", "normal");
   doc.text("rbs-entretainment-web.vercel.app/login", pad, 73);
 
-  doc.save(`VIP-${nombre.replace(/\s+/g, "-")}.pdf`);
+  if (options?.download !== false) {
+    doc.save(`VIP-${nombre.replace(/\s+/g, "-")}.pdf`);
+  }
+
+  // Return base64 for email attachment
+  const base64 = doc.output("datauristring").split(",")[1];
+  return base64;
 }
 
 export default function VipClientForm({
@@ -162,10 +165,36 @@ export default function VipClientForm({
         }
         setLoading(false);
         setSuccess(true);
-        // Auto-download PDF
+
         if (!result?._warning) {
-          generateCredentialsPDF(data.email, password, createdNameRef.current);
+          // Generate PDF (auto-download) and send email with ticket attached
+          const pdfBase64 = await generateCredentialsPDF(
+            data.email,
+            password,
+            createdNameRef.current
+          );
+
+          // Send credentials email in background
+          fetch("/api/send-vip-credentials", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: data.email,
+              nombre: createdNameRef.current,
+              password,
+              pdfBase64,
+            }),
+          }).then(async (res) => {
+            if (!res.ok) {
+              const body = await res.json().catch(() => ({}));
+              console.error("Email send failed:", body.error);
+              setWarning(`Cliente creado, pero falló el envío del email: ${body.error || "Error desconocido"}`);
+            }
+          }).catch((err) => {
+            console.error("Email send failed:", err);
+          });
         }
+
         setTimeout(() => {
           router.push("/dashboard/vip");
           router.refresh();
