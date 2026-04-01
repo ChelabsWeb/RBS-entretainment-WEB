@@ -60,11 +60,11 @@ async function generateCredentialsPDF(
     await new Promise<void>((resolve, reject) => {
       logoImg.onload = () => resolve();
       logoImg.onerror = () => reject();
-      logoImg.src = "/assets/Logos/RBS logo color.png";
+      logoImg.src = "/assets/Logos/RBS logo blanco footer.png";
     });
-    const logoW = 28;
+    const logoW = 20;
     const logoH = logoW * (logoImg.naturalHeight / logoImg.naturalWidth);
-    doc.addImage(logoImg, "PNG", pad, 7, logoW, logoH);
+    doc.addImage(logoImg, "PNG", pad, 8, logoW, logoH);
   } catch {
     doc.setTextColor(200, 170, 80);
     doc.setFontSize(12);
