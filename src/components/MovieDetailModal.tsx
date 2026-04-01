@@ -44,7 +44,7 @@ const CINEMA_EXHIBITORS = [
   { name: "Movie", short: "MOV", color: "#FF6B35", linkKey: "link_movie", logo: "/assets/Logos/movie-logo.png" },
   { name: "Life Cinemas", short: "LIFE", color: "#e5361f", linkKey: "link_life_cinemas", logo: "/assets/Logos/life-cinemas-logo.webp" },
   { name: "Grupo Cine", short: "GC", color: "#4f5ea7", linkKey: "link_grupo_cine", logo: "/assets/Logos/grupocine-logo.png" },
-  { name: "Cines del Este", short: "ESTE", color: "#2ba137", linkKey: "link_cines_del_este", logo: "/assets/Logos/cines-del-este-logo.jpg" },
+  { name: "Cines del Este", short: "ESTE", color: "#2ba137", linkKey: "link_cines_del_este", logo: "/assets/Logos/cines-del-este-logo.png" },
 ];
 
 function CastWithPhotos({ elenco, director }: { elenco: string; director: string | null }) {
@@ -331,38 +331,33 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
                             href={link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-3 px-3 py-3 rounded-md bg-white hover:bg-white/90 transition-all duration-300"
+                            aria-label={cinema.name}
+                            className="flex items-center justify-center px-4 py-3 rounded-md bg-white hover:bg-white/90 transition-all duration-300"
                           >
-                            <div className={`${cinema.name === "Cines del Este" ? "h-8 w-14" : "h-7 w-12"} relative flex-shrink-0`}>
+                            <div className="h-8 w-24 relative">
                               <Image
                                 src={cinema.logo!}
                                 alt={cinema.name}
                                 fill
-                                sizes="56px"
+                                sizes="96px"
                                 className="object-contain"
                               />
                             </div>
-                            <span className="text-[9px] font-black tracking-[0.1em] uppercase text-black/60 group-hover:text-black transition-colors truncate">
-                              {cinema.name}
-                            </span>
                           </a>
                         ) : (
                           <div
                             key={cinema.name}
-                            className="flex items-center gap-3 px-3 py-3 rounded-md bg-white/10 opacity-30 cursor-not-allowed"
+                            className="flex items-center justify-center px-4 py-3 rounded-md bg-white/10 opacity-30 cursor-not-allowed"
                           >
-                            <div className={`${cinema.name === "Cines del Este" ? "h-8 w-14" : "h-7 w-12"} relative flex-shrink-0 grayscale`}>
+                            <div className="h-8 w-24 relative grayscale">
                               <Image
                                 src={cinema.logo!}
                                 alt={cinema.name}
                                 fill
-                                sizes="56px"
+                                sizes="96px"
                                 className="object-contain"
                               />
                             </div>
-                            <span className="text-[9px] font-black tracking-[0.1em] uppercase text-white/30 truncate">
-                              {cinema.name}
-                            </span>
                           </div>
                         );
                       })}
