@@ -78,7 +78,7 @@ export function Footer() {
               <li><Link href="/" className="hover:text-white transition-colors uppercase">Home</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors uppercase">Quiénes Somos</Link></li>
               <li><Link href="/licensing" className="hover:text-white transition-colors uppercase">Licencias</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition-colors uppercase">Contacto</Link></li>
+              <li><Link href="/#contacto" className="hover:text-white transition-colors uppercase">Contacto</Link></li>
             </ul>
           </div>
           <div className="col-span-2 space-y-6 md:col-span-1">
