@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState, useRef } from "react";
-import { CheckCircle, Loader2 } from "lucide-react";
+import { CheckCircle, Download, Loader2, Eye, EyeOff } from "lucide-react";
 
 import {
   vipClientSchema,
@@ -27,6 +27,88 @@ interface VipClientFormProps {
   defaultValues?: VipClientFormValues & { id?: string };
 }
 
+function generatePassword(): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  let password = "";
+  for (let i = 0; i < 10; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+}
+
+async function generateCredentialsPDF(email: string, password: string, nombre: string) {
+  const { jsPDF } = await import("jspdf");
+
+  // Small ticket: 120mm x 70mm
+  const doc = new jsPDF({ unit: "mm", format: [120, 70] });
+
+  // Background
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, 120, 70, "F");
+
+  // Load logo
+  try {
+    const logoImg = new Image();
+    logoImg.crossOrigin = "anonymous";
+    await new Promise<void>((resolve, reject) => {
+      logoImg.onload = () => resolve();
+      logoImg.onerror = () => reject();
+      logoImg.src = "/assets/Logos/RBS logo color.png";
+    });
+    doc.addImage(logoImg, "PNG", 10, 6, 35, 12);
+  } catch {
+    doc.setTextColor(200, 170, 80);
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text("RBS ENTERTAINMENT", 10, 14);
+  }
+
+  // "Portal VIP" label
+  doc.setTextColor(255, 255, 255, 80);
+  doc.setFontSize(6);
+  doc.setFont("helvetica", "normal");
+  doc.text("PORTAL DE EXHIBIDORES", 10, 24);
+
+  // Divider line
+  doc.setDrawColor(255, 255, 255, 30);
+  doc.setLineWidth(0.2);
+  doc.line(10, 27, 110, 27);
+
+  // Name
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "bold");
+  doc.text(nombre, 10, 34);
+
+  // Email label + value
+  doc.setTextColor(150, 150, 150);
+  doc.setFontSize(6);
+  doc.setFont("helvetica", "normal");
+  doc.text("USUARIO", 10, 41);
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "bold");
+  doc.text(email, 10, 46);
+
+  // Password label + value
+  doc.setTextColor(150, 150, 150);
+  doc.setFontSize(6);
+  doc.setFont("helvetica", "normal");
+  doc.text("CONTRASEÑA", 10, 53);
+  doc.setTextColor(200, 170, 80);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  doc.text(password, 10, 58);
+
+  // Footer
+  doc.setTextColor(100, 100, 100);
+  doc.setFontSize(5);
+  doc.setFont("helvetica", "normal");
+  doc.text("rbs-entretainment-web.vercel.app/login", 10, 66);
+
+  doc.save(`VIP-${nombre.replace(/\s+/g, "-")}.pdf`);
+}
+
 export default function VipClientForm({
   mode,
   defaultValues,
@@ -36,7 +118,10 @@ export default function VipClientForm({
   const [warning, setWarning] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState(generatePassword());
   const createdEmailRef = useRef("");
+  const createdNameRef = useRef("");
 
   const {
     register,
@@ -61,16 +146,21 @@ export default function VipClientForm({
     try {
       if (mode === "create") {
         createdEmailRef.current = data.email;
-        const result = await createVipClient(data);
+        createdNameRef.current = `${data.nombre} ${data.apellido}`;
+        const result = await createVipClient({ ...data, password });
         if (result?._warning) {
           setWarning(result._warning);
         }
         setLoading(false);
         setSuccess(true);
+        // Auto-download PDF
+        if (!result?._warning) {
+          generateCredentialsPDF(data.email, password, createdNameRef.current);
+        }
         setTimeout(() => {
           router.push("/dashboard/vip");
           router.refresh();
-        }, 3000);
+        }, 5000);
         return;
       } else {
         if (!defaultValues?.id) throw new Error("ID de cliente no encontrado.");
@@ -128,23 +218,32 @@ export default function VipClientForm({
               Cliente VIP creado
             </h2>
             {warning ? (
-              <>
-                <p className="text-sm text-yellow-400 mb-1">{warning}</p>
-                <p className="text-[11px] text-white/30 mt-4">
-                  Redirigiendo a la lista de clientes...
-                </p>
-              </>
+              <p className="text-sm text-yellow-400 mb-4">{warning}</p>
             ) : (
               <>
                 <p className="text-sm text-white/50 mb-1">
-                  Se envió una invitación a:
+                  Credenciales generadas para:
                 </p>
-                <p className="text-sm text-[#4f5ea7] font-bold">{createdEmailRef.current}</p>
-                <p className="text-[11px] text-white/30 mt-4">
-                  Redirigiendo a la lista de clientes...
-                </p>
+                <p className="text-sm text-[#4f5ea7] font-bold mb-4">{createdEmailRef.current}</p>
+                <Button
+                  type="button"
+                  onClick={() =>
+                    generateCredentialsPDF(
+                      createdEmailRef.current,
+                      password,
+                      createdNameRef.current
+                    )
+                  }
+                  className="bg-white text-black hover:bg-zinc-200 flex items-center gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  Descargar ticket PDF
+                </Button>
               </>
             )}
+            <p className="text-[11px] text-white/30 mt-4">
+              Redirigiendo a la lista de clientes...
+            </p>
           </div>
         )}
         {!success && error && (
@@ -175,6 +274,43 @@ export default function VipClientForm({
               </div>
             ))}
           </div>
+
+          {mode === "create" && (
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-zinc-300">
+                Contraseña de acceso
+              </Label>
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="border-zinc-700 bg-zinc-900 text-white font-mono pr-10 focus-visible:ring-zinc-600"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+                  onClick={() => setPassword(generatePassword())}
+                >
+                  Generar
+                </Button>
+              </div>
+              <p className="text-[11px] text-white/30">
+                Se generará un ticket PDF con estas credenciales para enviar al cliente.
+              </p>
+            </div>
+          )}
 
           <div className="flex gap-3 pt-2">
             <Button

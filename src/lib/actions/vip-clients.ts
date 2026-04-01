@@ -60,11 +60,18 @@ export async function getVipClient(id: string) {
   return data;
 }
 
-export async function createVipClient(formData: VipClientFormValues) {
+export async function createVipClient(
+  formData: VipClientFormValues & { password: string }
+) {
   const parsed = vipClientSchema.safeParse(formData);
 
   if (!parsed.success) {
     throw new Error(parsed.error.issues.map((e) => e.message).join(", "));
+  }
+
+  const password = formData.password;
+  if (!password || password.length < 8) {
+    throw new Error("La contraseña debe tener al menos 8 caracteres.");
   }
 
   const supabase = await createClient();
@@ -130,7 +137,7 @@ export async function createVipClient(formData: VipClientFormValues) {
     email: data.email,
   });
 
-  // Create auth account and send invite email via service role
+  // Create auth account with password via service role
   if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
     try {
       const serviceSupabase = createServiceClient(
@@ -139,41 +146,30 @@ export async function createVipClient(formData: VipClientFormValues) {
         { auth: { autoRefreshToken: false, persistSession: false } }
       );
 
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://rbs-entretainment-web.vercel.app";
-      const inviteOpts = {
-        data: { nombre: data.nombre, apellido: data.apellido },
-        redirectTo: `${siteUrl}/auth/callback?type=invite`,
-      };
-
-      let { error: inviteError } = await serviceSupabase.auth.admin.inviteUserByEmail(
-        data.email,
-        inviteOpts
-      );
-
-      // If user already exists in auth (e.g. previously deleted VIP), remove and retry
-      if (inviteError?.message?.includes("already been registered")) {
-        const { data: { users } } = await serviceSupabase.auth.admin.listUsers({
-          page: 1,
-          perPage: 1,
-          filter: data.email,
-        } as never);
-        if (users?.[0]) {
-          await serviceSupabase.auth.admin.deleteUser(users[0].id);
-          const retry = await serviceSupabase.auth.admin.inviteUserByEmail(
-            data.email,
-            inviteOpts
-          );
-          inviteError = retry.error;
-        }
+      // Delete existing auth user if any (e.g. previously deleted VIP)
+      const { data: { users } } = await serviceSupabase.auth.admin.listUsers({
+        page: 1,
+        perPage: 1,
+        filter: data.email,
+      } as never);
+      if (users?.[0]) {
+        await serviceSupabase.auth.admin.deleteUser(users[0].id);
       }
 
-      if (inviteError) {
-        console.error("VIP invite error:", inviteError.message, inviteError);
-        return { ...data, _warning: `Cliente creado, pero falló el envío de invitación: ${inviteError.message}` };
+      const { error: createError } = await serviceSupabase.auth.admin.createUser({
+        email: data.email,
+        password,
+        email_confirm: true,
+        user_metadata: { nombre: data.nombre, apellido: data.apellido },
+      });
+
+      if (createError) {
+        console.error("VIP auth create error:", createError.message);
+        return { ...data, _warning: `Cliente creado, pero falló la cuenta de acceso: ${createError.message}` };
       }
     } catch (err) {
-      console.error("VIP invite failed:", err);
-      return { ...data, _warning: "Cliente creado, pero falló el envío de invitación." };
+      console.error("VIP auth create failed:", err);
+      return { ...data, _warning: "Cliente creado, pero falló la cuenta de acceso." };
     }
   }
 
