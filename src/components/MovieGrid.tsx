@@ -179,13 +179,13 @@ export function MovieGrid({ enCartelTitles, proximamenteTitles }: { enCartelTitl
   return (
     <section id="movies" className="bg-black py-32 px-6 md:px-12 border-t border-white/5">
       <div className="mb-24 flex flex-col gap-12 border-b border-white/10 pb-12">
-        <div className="w-full flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="w-full flex flex-col md:flex-row md:items-center justify-between gap-6 text-center md:text-left">
           <h2 className="text-sm font-bold tracking-[0.6em] uppercase text-white/50">
             CATÁLOGO 2026
           </h2>
-          
+
           {/* Custom Tabs Toggle */}
-          <div className="inline-flex items-center self-start md:self-auto rounded-full border border-white/10 p-1 bg-white/5">
+          <div className="inline-flex items-center self-center md:self-auto rounded-full border border-white/10 p-1 bg-white/5">
             <button
               onClick={() => setActiveTab("en_cartel")}
               className={`px-6 py-2.5 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-300 ${

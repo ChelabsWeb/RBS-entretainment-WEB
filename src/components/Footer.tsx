@@ -13,16 +13,16 @@ export function Footer() {
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
         <div className="flex flex-col justify-between">
           <div>
-            <div className="relative h-12 w-48 mb-6">
+            <div className="relative h-12 w-48 mb-6 mx-auto lg:mx-0">
               <Image
                 src="/assets/Logos/RBS logo color.png"
                 alt="RBS Entertainment"
                 fill
                 sizes="192px"
-                className="object-contain object-left"
+                className="object-contain"
               />
             </div>
-            <div className="mt-8 space-y-4 max-w-md">
+            <div className="mt-8 space-y-4 max-w-md mx-auto lg:mx-0">
               <div className="flex items-start gap-4">
                 <MapPin className="h-4 w-4 mt-1 text-white/40 flex-shrink-0" />
                 <p className="text-sm font-light leading-relaxed text-white/40 uppercase">
@@ -43,9 +43,9 @@ export function Footer() {
               </div>
             </div>
           </div>
-          <div className="mt-12">
+          <div className="mt-12 text-center lg:text-left">
              <h3 className="text-xs font-black tracking-[0.3em] uppercase text-white/20 mb-6">SEGUINOS</h3>
-             <div className="flex gap-6">
+             <div className="flex gap-6 justify-center lg:justify-start">
                <a href="https://www.facebook.com/CINELOVERS" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                  <Facebook className="h-6 w-6 cursor-pointer text-white/20 transition-all hover:scale-110 hover:text-white" />
                </a>
@@ -62,7 +62,7 @@ export function Footer() {
           </div>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 md:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 md:grid-cols-3 text-center lg:text-left">
           <div className="space-y-6">
             <h3 className="text-xs font-black tracking-[0.3em] uppercase text-white/20">ESTUDIOS</h3>
             <ul className="space-y-4 text-sm font-bold tracking-tight text-white/40">
