@@ -92,7 +92,7 @@ export function Footer() {
       </div>
 
       <div className="mt-32 flex flex-col items-center justify-between gap-6 border-t border-white/5 pt-12 text-[10px] font-black tracking-[0.3em] uppercase text-white/10 md:flex-row">
-        <p>© 2026 RBS ENTERTAINMENT URUGUAY. TODOS LOS DERECHOS RESERVADOS.</p>
+        <p className="max-lg:w-full max-lg:text-center">© 2026 RBS ENTERTAINMENT URUGUAY. TODOS LOS DERECHOS RESERVADOS.</p>
         <p className="flex items-center gap-2">
           MADE BY <span style={{ color: theme.primary }} className="transition-colors duration-500">Chelabs</span>
         </p>

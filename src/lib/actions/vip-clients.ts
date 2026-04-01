@@ -75,21 +75,53 @@ export async function createVipClient(formData: VipClientFormValues) {
 
   if (!user) throw new Error("No autenticado.");
 
-  const { data, error } = await supabase
+  // Check if a soft-deleted record exists with this email — reactivate it
+  const { data: deletedRecord } = await supabase
     .from("vip_clients")
-    .insert({
-      ...parsed.data,
-      created_by: user.id,
-    })
-    .select()
+    .select("id")
+    .eq("email", parsed.data.email)
+    .eq("is_deleted", true)
     .single();
 
-  if (error) {
-    console.error("Error creating VIP client:", error);
-    if (error.code === "23505") {
-      throw new Error("Ya existe un cliente VIP con ese email.");
+  let data;
+
+  if (deletedRecord) {
+    const { data: reactivated, error: reactivateError } = await supabase
+      .from("vip_clients")
+      .update({
+        ...parsed.data,
+        is_deleted: false,
+        is_suspended: false,
+        created_by: user.id,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", deletedRecord.id)
+      .select()
+      .single();
+
+    if (reactivateError) {
+      console.error("Error reactivating VIP client:", reactivateError);
+      throw new Error("No se pudo reactivar el cliente VIP.");
     }
-    throw new Error("No se pudo crear el cliente VIP.");
+    data = reactivated;
+  } else {
+    const { data: created, error } = await supabase
+      .from("vip_clients")
+      .insert({
+        ...parsed.data,
+        created_by: user.id,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error creating VIP client:", error);
+      if (error.code === "23505") {
+        throw new Error("Ya existe un cliente VIP con ese email.");
+      }
+      throw new Error("No se pudo crear el cliente VIP.");
+    }
+    data = created;
   }
 
   await logAction(user.id, "CREATE", "vip_client", data.id, {
@@ -271,6 +303,24 @@ export async function deleteVipClient(id: string) {
   if (error) {
     console.error("Error deleting VIP client:", error);
     throw new Error("No se pudo eliminar el cliente VIP.");
+  }
+
+  // Also delete the auth user so the email can be re-used
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const serviceSupabase = createServiceClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY,
+        { auth: { autoRefreshToken: false, persistSession: false } }
+      );
+      const { data: { users } } = await serviceSupabase.auth.admin.listUsers();
+      const existing = users?.find((u) => u.email === current.email);
+      if (existing) {
+        await serviceSupabase.auth.admin.deleteUser(existing.id);
+      }
+    } catch (err) {
+      console.error("Failed to delete auth user (non-blocking):", err);
+    }
   }
 
   await logAction(user.id, "DELETE", "vip_client", id, {

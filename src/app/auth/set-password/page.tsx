@@ -41,7 +41,7 @@ export default function SetPasswordPage() {
     }
 
     setSuccess(true);
-    setTimeout(() => router.push("/vip"), 2000);
+    setTimeout(() => router.push("/login"), 2000);
   };
 
   return (
