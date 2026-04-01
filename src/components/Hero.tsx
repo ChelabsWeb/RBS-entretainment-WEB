@@ -48,7 +48,7 @@ export function Hero({
             fetchNowPlayingMovies(),
             fetchUpcomingMovies()
           ]);
-          curated = [...nowPlaying.slice(0, 3), ...upcoming.slice(0, 3)];
+          curated = [...upcoming.slice(0, 3), ...nowPlaying.slice(0, 3)];
         }
 
         setMovies(curated.slice(0, 6));

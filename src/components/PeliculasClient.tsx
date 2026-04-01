@@ -39,6 +39,7 @@ export function PeliculasClient({
       <Navbar />
       {!searchQuery && (
         <Hero
+          initialMovies={proximos.length > 0 ? proximos.slice(0, 6) : undefined}
           heroTitle="PROXIMOS ESTRENOS"
           isLeftAligned={true}
           showDetails={false}
