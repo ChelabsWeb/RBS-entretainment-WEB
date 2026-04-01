@@ -5,6 +5,8 @@ import { MovieCarousel } from "@/components/MovieCarousel";
 import { Movie } from "@/lib/movies";
 import { MovieDetailModal } from "@/components/MovieDetailModal";
 import { Hero } from "@/components/Hero";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 import { SearchX } from "lucide-react";
 import { useLenis } from "lenis/react";
 import clsx from "clsx";
@@ -34,6 +36,7 @@ export function PeliculasClient({
 
   return (
     <main className="min-h-screen bg-black">
+      <Navbar />
       {!searchQuery && (
         <Hero
           heroTitle="PROXIMOS ESTRENOS"
@@ -92,6 +95,8 @@ export function PeliculasClient({
           </div>
         )}
       </div>
+
+      <Footer />
 
       <MovieDetailModal
         movie={selectedMovie}
