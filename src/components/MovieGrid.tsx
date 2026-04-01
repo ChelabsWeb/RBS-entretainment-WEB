@@ -185,7 +185,8 @@ export function MovieGrid({ enCartelTitles, proximamenteTitles }: { enCartelTitl
           </h2>
 
           {/* Custom Tabs Toggle */}
-          <div className="inline-flex items-center self-center md:self-auto rounded-full border border-white/10 p-0.5 bg-white/5">
+          <div className="flex justify-center md:justify-end">
+          <div className="inline-flex items-center rounded-full border border-white/10 p-0.5 bg-white/5">
             <button
               onClick={() => setActiveTab("en_cartel")}
               className={`px-4 py-1.5 md:px-6 md:py-2.5 rounded-full text-[9px] md:text-[10px] font-black tracking-[0.15em] md:tracking-[0.2em] uppercase transition-all duration-300 ${
@@ -207,8 +208,9 @@ export function MovieGrid({ enCartelTitles, proximamenteTitles }: { enCartelTitl
               Próximamente
             </button>
           </div>
+          </div>
         </div>
-        
+
         <div className="flex flex-col items-center justify-center space-y-8 text-center w-full">
           <p className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-[0.8]">
             <span className="font-light text-white/50">{activeTab === "en_cartel" ? "CARTELERA" : "FUTUROS"}</span> <br />
