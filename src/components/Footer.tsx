@@ -29,13 +29,13 @@ export function Footer() {
                   Luis A. De Herrera 1284 – WTC Torre 2 of. 1706. Montevideo, Uruguay.
                 </p>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 max-lg:justify-center">
                 <Mail className="h-4 w-4 text-white/40 flex-shrink-0 max-lg:hidden" />
                 <p className="text-sm font-light leading-relaxed text-white/40">
                   contacto@rbs.com.uy
                 </p>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 max-lg:justify-center">
                 <Phone className="h-4 w-4 text-white/40 flex-shrink-0 max-lg:hidden" />
                 <p className="text-sm font-light leading-relaxed text-white/40">
                   +598 2622 2222
