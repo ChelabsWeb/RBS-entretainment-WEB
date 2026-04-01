@@ -3,7 +3,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { CheckCircle, Loader2 } from "lucide-react";
 
 import {
   vipClientSchema,
@@ -33,6 +34,8 @@ export default function VipClientForm({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const createdEmailRef = useRef("");
 
   const {
     register,
@@ -56,13 +59,21 @@ export default function VipClientForm({
 
     try {
       if (mode === "create") {
+        createdEmailRef.current = data.email;
         await createVipClient(data);
+        setLoading(false);
+        setSuccess(true);
+        setTimeout(() => {
+          router.push("/dashboard/vip");
+          router.refresh();
+        }, 3000);
+        return;
       } else {
         if (!defaultValues?.id) throw new Error("ID de cliente no encontrado.");
         await updateVipClient(defaultValues.id, data);
+        router.push("/dashboard/vip");
+        router.refresh();
       }
-      router.push("/dashboard/vip");
-      router.refresh();
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Ocurrió un error inesperado."
@@ -106,13 +117,28 @@ export default function VipClientForm({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {error && (
+        {success && (
+          <div className="flex flex-col items-center py-12 text-center">
+            <CheckCircle className="h-12 w-12 text-green-400 mb-4" />
+            <h2 className="text-xl font-black uppercase tracking-tight text-white mb-2">
+              Cliente VIP creado
+            </h2>
+            <p className="text-sm text-white/50 mb-1">
+              Se envió una invitación a:
+            </p>
+            <p className="text-sm text-[#4f5ea7] font-bold">{createdEmailRef.current}</p>
+            <p className="text-[11px] text-white/30 mt-4">
+              Redirigiendo a la lista de clientes...
+            </p>
+          </div>
+        )}
+        {!success && error && (
           <div className="mb-4 rounded-md border border-red-800 bg-red-950/50 p-3 text-sm text-red-400">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        {!success && <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {fields.map((field) => (
               <div key={field.name} className="space-y-2">
@@ -139,10 +165,11 @@ export default function VipClientForm({
             <Button
               type="submit"
               disabled={loading}
-              className="bg-white text-black hover:bg-zinc-200"
+              className="bg-white text-black hover:bg-zinc-200 flex items-center gap-2"
             >
+              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
               {loading
-                ? "Guardando..."
+                ? "Creando..."
                 : mode === "create"
                   ? "Crear Cliente"
                   : "Guardar Cambios"}
@@ -156,7 +183,7 @@ export default function VipClientForm({
               Cancelar
             </Button>
           </div>
-        </form>
+        </form>}
       </CardContent>
     </Card>
   );
