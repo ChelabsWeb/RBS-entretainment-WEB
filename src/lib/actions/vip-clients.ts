@@ -107,11 +107,12 @@ export async function createVipClient(formData: VipClientFormValues) {
         { auth: { autoRefreshToken: false, persistSession: false } }
       );
 
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://rbs-entretainment-web.vercel.app";
       const { error: inviteError } = await serviceSupabase.auth.admin.inviteUserByEmail(
         data.email,
         {
           data: { nombre: data.nombre, apellido: data.apellido },
-          redirectTo: "https://rbs-entretainment-web.vercel.app/auth/confirm",
+          redirectTo: `${siteUrl}/auth/callback?type=invite`,
         }
       );
 
