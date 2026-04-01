@@ -99,23 +99,28 @@ export async function createVipClient(formData: VipClientFormValues) {
   });
 
   // Create auth account and send invite email via service role
-  const serviceSupabase = createServiceClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  );
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const serviceSupabase = createServiceClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY,
+        { auth: { autoRefreshToken: false, persistSession: false } }
+      );
 
-  const { error: inviteError } = await serviceSupabase.auth.admin.inviteUserByEmail(
-    data.email,
-    {
-      data: { nombre: data.nombre, apellido: data.apellido },
-      redirectTo: "https://rbs-entretainment-web.vercel.app/auth/callback?next=/vip",
+      const { error: inviteError } = await serviceSupabase.auth.admin.inviteUserByEmail(
+        data.email,
+        {
+          data: { nombre: data.nombre, apellido: data.apellido },
+          redirectTo: "https://rbs-entretainment-web.vercel.app/auth/callback?next=/vip",
+        }
+      );
+
+      if (inviteError) {
+        console.error("VIP invite error (non-blocking):", inviteError.message);
+      }
+    } catch (err) {
+      console.error("VIP invite failed (non-blocking):", err);
     }
-  );
-
-  if (inviteError) {
-    console.error("Error sending VIP invite:", inviteError.message);
-    // Don't throw — client was created, invite is secondary
   }
 
   return data;
