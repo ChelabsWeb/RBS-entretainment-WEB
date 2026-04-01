@@ -13,13 +13,13 @@ export function Footer() {
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
         <div className="flex flex-col justify-between max-lg:items-center">
           <div className="max-lg:flex max-lg:flex-col max-lg:items-center">
-            <div className="relative h-12 w-48 mb-6">
+            <div className="relative h-12 w-48 mb-6 max-lg:mx-auto">
               <Image
                 src="/assets/Logos/RBS logo color.png"
                 alt="RBS Entertainment"
                 fill
                 sizes="192px"
-                className="object-contain object-left"
+                className="object-contain max-lg:object-center lg:object-left"
               />
             </div>
             <div className="mt-8 space-y-4 max-w-md max-lg:text-center">
@@ -62,7 +62,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 md:grid-cols-3 max-lg:text-center">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-3 max-lg:text-center">
           <div className="space-y-6">
             <h3 className="text-xs font-black tracking-[0.3em] uppercase text-white/20">ESTUDIOS</h3>
             <ul className="space-y-4 text-sm font-bold tracking-tight text-white/40">
@@ -81,7 +81,7 @@ export function Footer() {
               <li><Link href="/#contacto" className="hover:text-white transition-colors uppercase">Contacto</Link></li>
             </ul>
           </div>
-          <div className="col-span-2 space-y-6 md:col-span-1">
+          <div className="space-y-6">
             <h3 className="text-xs font-black tracking-[0.3em] uppercase text-white/20">LEGAL</h3>
             <ul className="space-y-4 text-sm font-bold tracking-tight text-white/40">
               <li className="text-white/20 cursor-default uppercase">Privacidad</li>
