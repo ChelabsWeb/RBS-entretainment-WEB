@@ -194,7 +194,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
         <div className="flex flex-col lg:flex-row flex-1 min-h-0 overflow-hidden">
 
           {/* LEFT PANEL: Narrative & Media (62%) */}
-          <div className="flex-1 lg:w-[62%] p-8 lg:p-14 overflow-y-auto border-r border-white/5 scrollbar-hide">
+          <div className="flex-1 lg:w-[62%] p-8 lg:p-14 overflow-y-auto border-r border-white/5" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.15) transparent' }}>
             <div className="space-y-10">
               
               {/* Top: Compact Title */}
@@ -248,7 +248,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
           </div>
 
           {/* RIGHT PANEL: Metadata & Cast (38%) */}
-          <div className="lg:w-[38%] bg-white/[0.01] p-8 lg:p-12 overflow-y-auto border-t lg:border-t-0 border-white/5">
+          <div className="lg:w-[38%] bg-white/[0.01] p-8 lg:p-12 overflow-y-auto border-t lg:border-t-0 border-white/5" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.15) transparent' }}>
             <div className="space-y-12">
               
               {/* Metadata Grid (Compact) */}
