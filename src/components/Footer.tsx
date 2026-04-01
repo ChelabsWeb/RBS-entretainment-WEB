@@ -11,9 +11,9 @@ export function Footer() {
   return (
     <footer className="border-t border-white/5 bg-black px-6 py-12 md:px-12 md:py-32">
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
-        <div className="flex flex-col justify-between">
-          <div>
-            <div className="relative h-12 w-48 mb-6 mx-auto lg:mx-0">
+        <div className="flex flex-col justify-between items-center lg:items-start">
+          <div className="flex flex-col items-center lg:items-start">
+            <div className="relative h-12 w-48 mb-6">
               <Image
                 src="/assets/Logos/RBS logo color.png"
                 alt="RBS Entertainment"
@@ -22,20 +22,20 @@ export function Footer() {
                 className="object-contain"
               />
             </div>
-            <div className="mt-8 space-y-4 max-w-md mx-auto lg:mx-0">
-              <div className="flex items-start gap-4">
+            <div className="mt-8 space-y-4 max-w-md">
+              <div className="flex items-start gap-4 justify-center lg:justify-start">
                 <MapPin className="h-4 w-4 mt-1 text-white/40 flex-shrink-0" />
                 <p className="text-sm font-light leading-relaxed text-white/40 uppercase">
                   Luis A. De Herrera 1284 – WTC Torre 2 of. 1706. Montevideo, Uruguay.
                 </p>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 justify-center lg:justify-start">
                 <Mail className="h-4 w-4 text-white/40 flex-shrink-0" />
                 <p className="text-sm font-light leading-relaxed text-white/40">
                   contacto@rbs.com.uy
                 </p>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 justify-center lg:justify-start">
                 <Phone className="h-4 w-4 text-white/40 flex-shrink-0" />
                 <p className="text-sm font-light leading-relaxed text-white/40">
                   +598 2622 2222
