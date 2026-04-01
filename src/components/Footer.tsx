@@ -11,32 +11,41 @@ export function Footer() {
   return (
     <footer className="border-t border-white/5 bg-black px-6 py-12 md:px-12 md:py-32">
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-2">
-        <div className="flex flex-col justify-between items-center lg:items-start">
-          <div className="flex flex-col items-center lg:items-start">
+        <div className="flex flex-col justify-between max-lg:items-center">
+          <div className="max-lg:flex max-lg:flex-col max-lg:items-center">
             <div className="relative h-12 w-48 mb-6">
               <Image
                 src="/assets/Logos/RBS logo color.png"
                 alt="RBS Entertainment"
                 fill
                 sizes="192px"
-                className="object-contain"
+                className="object-contain object-left"
               />
             </div>
-            <div className="mt-8 space-y-3 text-center lg:text-left">
-              <p className="text-sm font-light leading-relaxed text-white/40 uppercase">
-                Luis A. De Herrera 1284 – WTC Torre 2 of. 1706. Montevideo, Uruguay.
-              </p>
-              <p className="text-sm font-light text-white/40">
-                contacto@rbs.com.uy
-              </p>
-              <p className="text-sm font-light text-white/40">
-                +598 2622 2222
-              </p>
+            <div className="mt-8 space-y-4 max-w-md max-lg:text-center">
+              <div className="flex items-start gap-4 max-lg:justify-center">
+                <MapPin className="h-4 w-4 mt-1 text-white/40 flex-shrink-0" />
+                <p className="text-sm font-light leading-relaxed text-white/40 uppercase">
+                  Luis A. De Herrera 1284 – WTC Torre 2 of. 1706. Montevideo, Uruguay.
+                </p>
+              </div>
+              <div className="flex items-center gap-4 max-lg:justify-center">
+                <Mail className="h-4 w-4 text-white/40 flex-shrink-0" />
+                <p className="text-sm font-light leading-relaxed text-white/40">
+                  contacto@rbs.com.uy
+                </p>
+              </div>
+              <div className="flex items-center gap-4 max-lg:justify-center">
+                <Phone className="h-4 w-4 text-white/40 flex-shrink-0" />
+                <p className="text-sm font-light leading-relaxed text-white/40">
+                  +598 2622 2222
+                </p>
+              </div>
             </div>
           </div>
-          <div className="mt-12 text-center lg:text-left">
+          <div className="mt-12 max-lg:text-center">
              <h3 className="text-xs font-black tracking-[0.3em] uppercase text-white/20 mb-6">SEGUINOS</h3>
-             <div className="flex gap-6 justify-center lg:justify-start">
+             <div className="flex gap-6 max-lg:justify-center">
                <a href="https://www.facebook.com/CINELOVERS" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                  <Facebook className="h-6 w-6 cursor-pointer text-white/20 transition-all hover:scale-110 hover:text-white" />
                </a>
@@ -52,8 +61,8 @@ export function Footer() {
              </div>
           </div>
         </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 md:grid-cols-3 text-center lg:text-left">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 md:grid-cols-3 max-lg:text-center">
           <div className="space-y-6">
             <h3 className="text-xs font-black tracking-[0.3em] uppercase text-white/20">ESTUDIOS</h3>
             <ul className="space-y-4 text-sm font-bold tracking-tight text-white/40">
@@ -81,7 +90,7 @@ export function Footer() {
           </div>
         </div>
       </div>
-      
+
       <div className="mt-32 flex flex-col items-center justify-between gap-6 border-t border-white/5 pt-12 text-[10px] font-black tracking-[0.3em] uppercase text-white/10 md:flex-row">
         <p>© 2026 RBS ENTERTAINMENT URUGUAY. TODOS LOS DERECHOS RESERVADOS.</p>
         <p className="flex items-center gap-2">
