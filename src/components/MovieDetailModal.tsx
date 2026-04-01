@@ -160,7 +160,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent showCloseButton={false} className="!flex !flex-col max-w-[95vw] lg:max-w-6xl border-white/5 bg-zinc-950 p-0 !gap-0 text-white overflow-hidden max-h-[92vh] shadow-[0_0_100px_rgba(0,0,0,1)]">
+      <DialogContent showCloseButton={false} className="max-w-[95vw] lg:max-w-6xl border-white/5 bg-zinc-950 p-0 gap-0 text-white overflow-hidden max-h-[92vh] shadow-[0_0_100px_rgba(0,0,0,1)]">
 
         {/* Side navigation arrows — positioned outside the modal box on desktop */}
         {movies && onNavigate && (
