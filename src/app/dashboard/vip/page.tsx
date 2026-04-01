@@ -133,8 +133,7 @@ export default function VipPage() {
         </h1>
         <Link href="/dashboard/vip/new">
           <Button
-            className="uppercase tracking-widest"
-            style={{ backgroundColor: "#4f5ea7" }}
+            className="bg-[#4f5ea7] hover:bg-[#4f5ea7]/80 text-white uppercase tracking-widest transition-colors"
           >
             <Plus className="mr-2 h-4 w-4" />
             Nuevo Cliente VIP
@@ -157,7 +156,7 @@ export default function VipPage() {
         <Button
           variant="outline"
           onClick={handleSearch}
-          className="border-white/10 uppercase tracking-widest text-white/60 hover:text-white"
+          className="border-white/10 uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/5 transition-colors"
         >
           Buscar
         </Button>
@@ -236,7 +235,7 @@ export default function VipPage() {
                         <Button
                           variant="ghost"
                           size="icon-sm"
-                          className="text-white/40 hover:text-white"
+                          className="text-white/40 hover:text-white hover:bg-white/10 transition-colors"
                           title="Editar"
                         >
                           <Pencil className="h-4 w-4" />
@@ -247,7 +246,7 @@ export default function VipPage() {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        className="text-white/40 hover:text-white"
+                        className="text-white/40 hover:text-white hover:bg-white/10 transition-colors"
                         title={client.is_suspended ? "Reactivar" : "Suspender"}
                         disabled={actionLoading === client.id}
                         onClick={() => handleSuspend(client.id)}
@@ -267,7 +266,7 @@ export default function VipPage() {
                           <Button
                             variant="ghost"
                             size="icon-sm"
-                            className="text-white/40 hover:text-red-400"
+                            className="text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-colors"
                             title="Eliminar"
                             disabled={actionLoading === client.id}
                           >
