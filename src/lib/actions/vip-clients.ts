@@ -165,10 +165,15 @@ export async function createVipClient(formData: VipClientFormValues) {
       }
 
       if (inviteError) {
-        console.error("VIP invite error (non-blocking):", inviteError.message);
+        console.error("VIP invite error:", inviteError.message, inviteError);
+        throw new Error(`Cliente VIP creado, pero falló el envío de invitación: ${inviteError.message}`);
       }
     } catch (err) {
-      console.error("VIP invite failed (non-blocking):", err);
+      console.error("VIP invite failed:", err);
+      if (err instanceof Error && err.message.startsWith("Cliente VIP creado")) {
+        throw err;
+      }
+      throw new Error("Cliente VIP creado, pero falló el envío de invitación.");
     }
   }
 
