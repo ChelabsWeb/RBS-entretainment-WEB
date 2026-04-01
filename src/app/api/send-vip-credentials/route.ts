@@ -36,7 +36,7 @@ export async function POST(request: Request) {
 
   try {
     const { error } = await resend.emails.send({
-      from: "RBS Entertainment <noreply@rbs.com.uy>",
+      from: "RBS Entertainment <onboarding@resend.dev>",
       to: email,
       subject: "Tus credenciales de acceso — RBS Entertainment",
       html: `
