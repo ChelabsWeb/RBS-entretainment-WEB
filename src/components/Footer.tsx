@@ -66,10 +66,10 @@ export function Footer() {
           <div className="space-y-6">
             <h3 className="text-xs font-black tracking-[0.3em] uppercase text-white/20">ESTUDIOS</h3>
             <ul className="space-y-4 text-sm font-bold tracking-tight text-white/40">
-              <li className="cursor-pointer transition-colors hover:text-white uppercase">Walt Disney</li>
-              <li className="cursor-pointer transition-colors hover:text-white uppercase transition-colors">Universal Studios</li>
-              <li className="cursor-pointer transition-colors hover:text-white uppercase transition-colors">Paramount Pictures</li>
-              <li className="cursor-pointer transition-colors hover:text-white uppercase transition-colors">UIP Uruguay</li>
+              <li><a href="https://www.thewaltdisneycompany.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors uppercase">Walt Disney</a></li>
+              <li><a href="https://www.universalpictures.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors uppercase">Universal Studios</a></li>
+              <li><a href="https://www.paramountpictures.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors uppercase">Paramount Pictures</a></li>
+              <li><a href="https://www.uip.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors uppercase">UIP</a></li>
             </ul>
           </div>
           <div className="space-y-6">
