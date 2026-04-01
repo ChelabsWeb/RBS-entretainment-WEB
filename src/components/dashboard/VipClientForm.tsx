@@ -39,14 +39,16 @@ function generatePassword(): string {
 async function generateCredentialsPDF(email: string, password: string, nombre: string) {
   const { jsPDF } = await import("jspdf");
 
-  // Small ticket: 120mm x 70mm
-  const doc = new jsPDF({ unit: "mm", format: [120, 70] });
+  const W = 130;
+  const H = 80;
+  const pad = 12;
+  const doc = new jsPDF({ unit: "mm", format: [W, H] });
 
-  // Background
+  // Full black background — slightly oversized to avoid white edge artifacts
   doc.setFillColor(10, 10, 10);
-  doc.rect(0, 0, 120, 70, "F");
+  doc.rect(-1, -1, W + 2, H + 2, "F");
 
-  // Load logo
+  // Load logo — natural ratio is ~2.5:1, so 28x11 keeps proportions
   try {
     const logoImg = new Image();
     logoImg.crossOrigin = "anonymous";
@@ -55,56 +57,62 @@ async function generateCredentialsPDF(email: string, password: string, nombre: s
       logoImg.onerror = () => reject();
       logoImg.src = "/assets/Logos/RBS logo color.png";
     });
-    doc.addImage(logoImg, "PNG", 10, 6, 35, 12);
+    const logoW = 28;
+    const logoH = logoW * (logoImg.naturalHeight / logoImg.naturalWidth);
+    doc.addImage(logoImg, "PNG", pad, 7, logoW, logoH);
   } catch {
     doc.setTextColor(200, 170, 80);
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
-    doc.text("RBS ENTERTAINMENT", 10, 14);
+    doc.text("RBS", pad, 14);
   }
 
-  // "Portal VIP" label
-  doc.setTextColor(255, 255, 255, 80);
-  doc.setFontSize(6);
+  // "Portal VIP" label — top right
+  doc.setTextColor(100, 100, 100);
+  doc.setFontSize(5.5);
   doc.setFont("helvetica", "normal");
-  doc.text("PORTAL DE EXHIBIDORES", 10, 24);
+  doc.text("PORTAL DE EXHIBIDORES", W - pad, 11, { align: "right" });
 
-  // Divider line
-  doc.setDrawColor(255, 255, 255, 30);
-  doc.setLineWidth(0.2);
-  doc.line(10, 27, 110, 27);
+  // Divider
+  doc.setDrawColor(60, 60, 60);
+  doc.setLineWidth(0.15);
+  doc.line(pad, 24, W - pad, 24);
 
   // Name
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(9);
+  doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
-  doc.text(nombre, 10, 34);
+  doc.text(nombre, pad, 32);
 
-  // Email label + value
-  doc.setTextColor(150, 150, 150);
-  doc.setFontSize(6);
+  // Email
+  doc.setTextColor(120, 120, 120);
+  doc.setFontSize(5.5);
   doc.setFont("helvetica", "normal");
-  doc.text("USUARIO", 10, 41);
+  doc.text("USUARIO", pad, 40);
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(9);
   doc.setFont("helvetica", "bold");
-  doc.text(email, 10, 46);
+  doc.text(email, pad, 45);
 
-  // Password label + value
-  doc.setTextColor(150, 150, 150);
-  doc.setFontSize(6);
+  // Password
+  doc.setTextColor(120, 120, 120);
+  doc.setFontSize(5.5);
   doc.setFont("helvetica", "normal");
-  doc.text("CONTRASEÑA", 10, 53);
+  doc.text("CONTRASEÑA", pad, 54);
   doc.setTextColor(200, 170, 80);
-  doc.setFontSize(10);
+  doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
-  doc.text(password, 10, 58);
+  doc.text(password, pad, 60);
 
-  // Footer
-  doc.setTextColor(100, 100, 100);
+  // Footer divider
+  doc.setDrawColor(40, 40, 40);
+  doc.line(pad, 68, W - pad, 68);
+
+  // Footer URL
+  doc.setTextColor(80, 80, 80);
   doc.setFontSize(5);
   doc.setFont("helvetica", "normal");
-  doc.text("rbs-entretainment-web.vercel.app/login", 10, 66);
+  doc.text("rbs-entretainment-web.vercel.app/login", pad, 73);
 
   doc.save(`VIP-${nombre.replace(/\s+/g, "-")}.pdf`);
 }
