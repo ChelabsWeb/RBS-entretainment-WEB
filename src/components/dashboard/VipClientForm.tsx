@@ -42,11 +42,12 @@ async function generateCredentialsPDF(email: string, password: string, nombre: s
   const W = 130;
   const H = 80;
   const pad = 12;
-  const doc = new jsPDF({ unit: "mm", format: [W, H] });
+  // jsPDF format takes [height, width] in portrait — we use landscape to get W > H
+  const doc = new jsPDF({ unit: "mm", format: [H, W], orientation: "landscape" });
 
-  // Full black background — slightly oversized to avoid white edge artifacts
+  // Full black background
   doc.setFillColor(10, 10, 10);
-  doc.rect(-1, -1, W + 2, H + 2, "F");
+  doc.rect(0, 0, W, H, "F");
 
   // Load logo — natural ratio is ~2.5:1, so 28x11 keeps proportions
   try {
