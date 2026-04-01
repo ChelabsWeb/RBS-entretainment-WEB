@@ -109,7 +109,7 @@ export async function createVipClient(formData: VipClientFormValues) {
     data.email,
     {
       data: { nombre: data.nombre, apellido: data.apellido },
-      redirectTo: "https://rbsentertainment.com.uy/vip",
+      redirectTo: "https://rbs-entretainment-web.vercel.app/auth/callback?next=/vip",
     }
   );
 
