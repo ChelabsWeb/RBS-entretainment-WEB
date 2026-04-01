@@ -160,7 +160,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent showCloseButton={false} className="max-w-[95vw] lg:max-w-6xl border-white/5 bg-zinc-950 p-0 text-white overflow-y-auto lg:overflow-visible max-h-[92vh] shadow-[0_0_100px_rgba(0,0,0,1)]">
+      <DialogContent showCloseButton={false} className="max-w-[95vw] lg:max-w-6xl border-white/5 bg-zinc-950 p-0 text-white overflow-hidden max-h-[92vh] shadow-[0_0_100px_rgba(0,0,0,1)]">
 
         {/* Side navigation arrows — positioned outside the modal box on desktop */}
         {movies && onNavigate && (
@@ -191,8 +191,8 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
           <X className="h-5 w-5" />
         </button>
 
-        <div className="flex flex-col lg:flex-row h-full min-h-0">
-          
+        <div className="flex flex-col lg:flex-row h-full max-h-[92vh] min-h-0">
+
           {/* LEFT PANEL: Narrative & Media (62%) */}
           <div className="flex-1 lg:w-[62%] p-8 lg:p-14 overflow-y-auto border-r border-white/5 scrollbar-hide">
             <div className="space-y-10">
@@ -248,7 +248,7 @@ export function MovieDetailModal({ movie, isOpen, onClose, themeColor, movies, c
           </div>
 
           {/* RIGHT PANEL: Metadata & Cast (38%) */}
-          <div className="lg:w-[38%] bg-white/[0.01] p-8 lg:p-12 lg:overflow-y-auto border-t lg:border-t-0 border-white/5">
+          <div className="lg:w-[38%] bg-white/[0.01] p-8 lg:p-12 overflow-y-auto border-t lg:border-t-0 border-white/5">
             <div className="space-y-12">
               
               {/* Metadata Grid (Compact) */}
