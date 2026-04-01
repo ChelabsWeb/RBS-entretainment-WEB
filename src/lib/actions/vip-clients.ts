@@ -152,10 +152,13 @@ export async function createVipClient(formData: VipClientFormValues) {
 
       // If user already exists in auth (e.g. previously deleted VIP), remove and retry
       if (inviteError?.message?.includes("already been registered")) {
-        const { data: { users } } = await serviceSupabase.auth.admin.listUsers();
-        const existing = users?.find((u) => u.email === data.email);
-        if (existing) {
-          await serviceSupabase.auth.admin.deleteUser(existing.id);
+        const { data: { users } } = await serviceSupabase.auth.admin.listUsers({
+          page: 1,
+          perPage: 1,
+          filter: data.email,
+        } as never);
+        if (users?.[0]) {
+          await serviceSupabase.auth.admin.deleteUser(users[0].id);
           const retry = await serviceSupabase.auth.admin.inviteUserByEmail(
             data.email,
             inviteOpts
@@ -166,14 +169,11 @@ export async function createVipClient(formData: VipClientFormValues) {
 
       if (inviteError) {
         console.error("VIP invite error:", inviteError.message, inviteError);
-        throw new Error(`Cliente VIP creado, pero falló el envío de invitación: ${inviteError.message}`);
+        return { ...data, _warning: `Cliente creado, pero falló el envío de invitación: ${inviteError.message}` };
       }
     } catch (err) {
       console.error("VIP invite failed:", err);
-      if (err instanceof Error && err.message.startsWith("Cliente VIP creado")) {
-        throw err;
-      }
-      throw new Error("Cliente VIP creado, pero falló el envío de invitación.");
+      return { ...data, _warning: "Cliente creado, pero falló el envío de invitación." };
     }
   }
 
@@ -318,10 +318,13 @@ export async function deleteVipClient(id: string) {
         process.env.SUPABASE_SERVICE_ROLE_KEY,
         { auth: { autoRefreshToken: false, persistSession: false } }
       );
-      const { data: { users } } = await serviceSupabase.auth.admin.listUsers();
-      const existing = users?.find((u) => u.email === current.email);
-      if (existing) {
-        await serviceSupabase.auth.admin.deleteUser(existing.id);
+      const { data: { users } } = await serviceSupabase.auth.admin.listUsers({
+        page: 1,
+        perPage: 1,
+        filter: current.email,
+      } as never);
+      if (users?.[0]) {
+        await serviceSupabase.auth.admin.deleteUser(users[0].id);
       }
     } catch (err) {
       console.error("Failed to delete auth user (non-blocking):", err);

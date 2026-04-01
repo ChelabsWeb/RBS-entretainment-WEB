@@ -33,6 +33,7 @@ export default function VipClientForm({
 }: VipClientFormProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [warning, setWarning] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const createdEmailRef = useRef("");
@@ -60,7 +61,10 @@ export default function VipClientForm({
     try {
       if (mode === "create") {
         createdEmailRef.current = data.email;
-        await createVipClient(data);
+        const result = await createVipClient(data);
+        if (result?._warning) {
+          setWarning(result._warning);
+        }
         setLoading(false);
         setSuccess(true);
         setTimeout(() => {
@@ -123,13 +127,24 @@ export default function VipClientForm({
             <h2 className="text-xl font-black uppercase tracking-tight text-white mb-2">
               Cliente VIP creado
             </h2>
-            <p className="text-sm text-white/50 mb-1">
-              Se envió una invitación a:
-            </p>
-            <p className="text-sm text-[#4f5ea7] font-bold">{createdEmailRef.current}</p>
-            <p className="text-[11px] text-white/30 mt-4">
-              Redirigiendo a la lista de clientes...
-            </p>
+            {warning ? (
+              <>
+                <p className="text-sm text-yellow-400 mb-1">{warning}</p>
+                <p className="text-[11px] text-white/30 mt-4">
+                  Redirigiendo a la lista de clientes...
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-white/50 mb-1">
+                  Se envió una invitación a:
+                </p>
+                <p className="text-sm text-[#4f5ea7] font-bold">{createdEmailRef.current}</p>
+                <p className="text-[11px] text-white/30 mt-4">
+                  Redirigiendo a la lista de clientes...
+                </p>
+              </>
+            )}
           </div>
         )}
         {!success && error && (
