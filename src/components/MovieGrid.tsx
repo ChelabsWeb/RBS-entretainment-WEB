@@ -185,12 +185,12 @@ export function MovieGrid({ enCartelTitles, proximamenteTitles }: { enCartelTitl
           </h2>
 
           {/* Custom Tabs Toggle */}
-          <div className="inline-flex items-center self-center md:self-auto rounded-full border border-white/10 p-1 bg-white/5">
+          <div className="inline-flex items-center self-center md:self-auto rounded-full border border-white/10 p-0.5 bg-white/5">
             <button
               onClick={() => setActiveTab("en_cartel")}
-              className={`px-6 py-2.5 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-300 ${
-                activeTab === "en_cartel" 
-                  ? "bg-theme-primary text-white shadow-lg" 
+              className={`px-4 py-1.5 md:px-6 md:py-2.5 rounded-full text-[9px] md:text-[10px] font-black tracking-[0.15em] md:tracking-[0.2em] uppercase transition-all duration-300 ${
+                activeTab === "en_cartel"
+                  ? "bg-theme-primary text-white shadow-lg"
                   : "text-white/40 hover:text-white"
               }`}
             >
@@ -198,9 +198,9 @@ export function MovieGrid({ enCartelTitles, proximamenteTitles }: { enCartelTitl
             </button>
             <button
               onClick={() => setActiveTab("proximamente")}
-              className={`px-6 py-2.5 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-300 ${
-                activeTab === "proximamente" 
-                  ? "bg-theme-primary text-white shadow-lg" 
+              className={`px-4 py-1.5 md:px-6 md:py-2.5 rounded-full text-[9px] md:text-[10px] font-black tracking-[0.15em] md:tracking-[0.2em] uppercase transition-all duration-300 ${
+                activeTab === "proximamente"
+                  ? "bg-theme-primary text-white shadow-lg"
                   : "text-white/40 hover:text-white"
               }`}
             >
