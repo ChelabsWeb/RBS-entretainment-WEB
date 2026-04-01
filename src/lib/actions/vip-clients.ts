@@ -108,13 +108,29 @@ export async function createVipClient(formData: VipClientFormValues) {
       );
 
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://rbs-entretainment-web.vercel.app";
-      const { error: inviteError } = await serviceSupabase.auth.admin.inviteUserByEmail(
+      const inviteOpts = {
+        data: { nombre: data.nombre, apellido: data.apellido },
+        redirectTo: `${siteUrl}/auth/callback?type=invite`,
+      };
+
+      let { error: inviteError } = await serviceSupabase.auth.admin.inviteUserByEmail(
         data.email,
-        {
-          data: { nombre: data.nombre, apellido: data.apellido },
-          redirectTo: `${siteUrl}/auth/callback?type=invite`,
-        }
+        inviteOpts
       );
+
+      // If user already exists in auth (e.g. previously deleted VIP), remove and retry
+      if (inviteError?.message?.includes("already been registered")) {
+        const { data: { users } } = await serviceSupabase.auth.admin.listUsers();
+        const existing = users?.find((u) => u.email === data.email);
+        if (existing) {
+          await serviceSupabase.auth.admin.deleteUser(existing.id);
+          const retry = await serviceSupabase.auth.admin.inviteUserByEmail(
+            data.email,
+            inviteOpts
+          );
+          inviteError = retry.error;
+        }
+      }
 
       if (inviteError) {
         console.error("VIP invite error (non-blocking):", inviteError.message);
